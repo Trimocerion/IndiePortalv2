@@ -151,9 +151,9 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                                      description,
                                      birthday
                                  }: {
-        username: string,
+        username?: string,
         avatar_url?: string,
-        description: string,
+        description?: string,
         birthday?: any
     }) {
         try {

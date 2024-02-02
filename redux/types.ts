@@ -1,12 +1,12 @@
 export interface UserProfileState {
     id?:string;
-    username?: string;
-    avatar_url?: string;
-    description?: string;
-    updated_at?:string;
-    created_at?:string;
-    role?:string;
-    birthday?:string;
+    username?: any;
+    avatar_url?: any;
+    description?: any;
+    updated_at?:any;
+    created_at?:any;
+    role?:any;
+    birthday?:any;
 }
 
 export interface Game {
