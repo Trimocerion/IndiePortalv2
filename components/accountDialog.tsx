@@ -124,11 +124,11 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                 }
 
                 if (data) {
-                    setUsername(data?.username ?? '');
-                    setEmail(data?.email ?? '');
-                    setAvatarUrl(data?.avatar_url ?? '');
-                    setRole(data?.role ?? '');
-                    setDescription(data?.description ?? '');
+                    setUsername(data?.username);
+                    setEmail(data?.email);
+                    setAvatarUrl(data?.avatar_url);
+                    setRole(data?.role);
+                    setDescription(data?.description);
                     setBirthday(dayjs.utc(data.birthday).local());
                     dispatch(setUserProfile(data))
                 }
