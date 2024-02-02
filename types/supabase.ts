@@ -63,6 +63,21 @@ export interface Database {
           }
         ]
       }
+      developers: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       game_genres: {
         Row: {
           game_id: number
@@ -95,47 +110,58 @@ export interface Database {
       }
       games: {
         Row: {
+          age_range: number | null
           cover_image_url: string | null
           created_at: string
           description: string | null
-          developer: string | null
-          genres: number | null
+          developer_id: number | null
           id: number
-          platforms: Json | null
-          publisher: string | null
+          platform_ids: number | null
           release_date: string | null
           title: string | null
         }
         Insert: {
+          age_range?: number | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
-          developer?: string | null
-          genres?: number | null
+          developer_id?: number | null
           id?: number
-          platforms?: Json | null
-          publisher?: string | null
+          platform_ids?: number | null
           release_date?: string | null
           title?: string | null
         }
         Update: {
+          age_range?: number | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
-          developer?: string | null
-          genres?: number | null
+          developer_id?: number | null
           id?: number
-          platforms?: Json | null
-          publisher?: string | null
+          platform_ids?: number | null
           release_date?: string | null
           title?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "games_genres_fkey"
-            columns: ["genres"]
+            foreignKeyName: "games_age_range_fkey"
+            columns: ["age_range"]
             isOneToOne: false
-            referencedRelation: "genres"
+            referencedRelation: "age_ranges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_platform_ids_fkey"
+            columns: ["platform_ids"]
+            isOneToOne: false
+            referencedRelation: "platforms"
             referencedColumns: ["id"]
           }
         ]
@@ -152,6 +178,21 @@ export interface Database {
         Update: {
           genre_name?: string
           id?: number
+        }
+        Relationships: []
+      }
+      platforms: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
         }
         Relationships: []
       }

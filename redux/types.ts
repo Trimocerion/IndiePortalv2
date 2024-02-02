@@ -10,19 +10,19 @@ export interface UserProfileState {
 }
 
 export interface Game {
-    id?: string;
+    genres?: any;
+    platforms?: any;
+    age_ranges?: any;
+    id?: number;
     title?: string;
     description?: string;
     cover_image_url?: string;
     release_date?: string;
-    platforms?: string[];
-    genres?: string[];
-    developer?: string;
-    publisher?: string;
 }
 
 export interface Comment {
-    id?: string;
+    profiles?: any;
+    id?: number;
     content?: string;
     user_id?: string;
     game_id?: string;

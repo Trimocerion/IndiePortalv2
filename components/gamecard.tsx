@@ -1,26 +1,15 @@
 // components/GameCard.tsx
 import React from 'react';
-import {
-    Card,
-    CardHeader,
-    CardContent,
-    CardActions,
-    Button,
-    Typography,
-    Skeleton,
-    CardMedia,
-    Badge, Container
-} from '@mui/material';
+import {Badge, Button, Card, CardActions, CardContent, CardMedia, Typography} from '@mui/material';
 import {useRouter} from "next/router";
-import {format} from "node:url";
 
 
 interface GameCardProps {
-    title: string;
-    avatar_url: string;
+    title?: string;
+    avatar_url?: string;
     desc?: string;
-    id?: string;
-    genres: [];
+    id?: number;
+    genres?: string;
     created_at?: any;
 }
 

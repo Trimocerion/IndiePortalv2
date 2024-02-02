@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 const cachedTheme =
   typeof window !== "undefined" && window.localStorage.getItem("darkMode");

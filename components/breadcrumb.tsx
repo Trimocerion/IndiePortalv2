@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
-import { emphasize, styled } from '@mui/material/styles';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
+import {useRouter} from 'next/router';
+import {emphasize, styled} from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import HomeIcon from '@mui/icons-material/Home';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -31,9 +29,16 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 export default function CustomizedBreadcrumbs() {
     const router = useRouter();
 
+
+    const handleReturnClick = (event: React.MouseEvent<Element, MouseEvent>) => {
+        event.preventDefault();
+
+        router.push("/");
+    }
+
+
     const handleClick = (event: React.MouseEvent<Element, MouseEvent>) => {
         event.preventDefault();
-        console.info('You clicked a breadcrumb.');
 
         // Użyj router.back(), aby cofnąć się o jeden krok
         router.back();
@@ -44,7 +49,7 @@ export default function CustomizedBreadcrumbs() {
             <StyledBreadcrumb
                 component="a"
                 label="Home"
-                onClick={handleClick}
+                onClick={handleReturnClick}
                 icon={<HomeIcon fontSize="small" />}
             />
         </>

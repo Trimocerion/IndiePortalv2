@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 import theme from "./themeSlice";
 import userProfileReducer from './userProfileSlice';
 

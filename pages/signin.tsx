@@ -1,15 +1,13 @@
 import {useSupabaseClient, useUser} from '@supabase/auth-helpers-react'
 import * as React from 'react';
-import {CssBaseline, Grid, Box, Paper, Breadcrumbs, Typography, Link} from '@mui/material';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { Auth } from '@supabase/auth-ui-react'
-import { useTheme } from '@mui/material/styles';
+import {useEffect} from 'react';
+import {Box, CssBaseline, Grid, Paper} from '@mui/material';
+import {ThemeSupa} from '@supabase/auth-ui-shared';
+import {Auth} from '@supabase/auth-ui-react'
+import {useTheme} from '@mui/material/styles';
 import Head from 'next/head';
-import themeSlice from '../redux/themeSlice';
-import Image from "next/image";
 import CustomizedBreadcrumbs from "../components/breadcrumb";
 import {useRouter} from "next/router";
-import {useEffect} from "react";
 
 
 export default function SignIn() {

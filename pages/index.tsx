@@ -1,15 +1,8 @@
 import * as React from 'react';
-import {
-    Container,
-    Grid,
-    Skeleton,
-    Typography,
-    Pagination,
-} from '@mui/material';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
-import { supabase } from '../utility/supabaseClient';
-import { Game } from '../redux/types';
+import {useEffect, useState} from 'react';
+import {Container, Grid, Pagination, Skeleton, Typography,} from '@mui/material';
+import {supabase} from '../utility/supabaseClient';
+import {Game} from '../redux/types';
 import GameCard from '../components/gamecard';
 
 export default function Index() {
@@ -33,6 +26,7 @@ export default function Index() {
                 return;
             }
 
+            // @ts-ignore
             setGames(gamesData || []);
         } catch (error: any) {
             console.error('Error fetching games:', error.message);

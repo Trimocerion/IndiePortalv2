@@ -1,7 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../utility/supabaseClient";
-import { useUser } from "@supabase/auth-helpers-react";
+import {NextApiRequest, NextApiResponse} from "next";
+import {supabase} from "../../utility/supabaseClient";
 
 type Game = {
     title: string;

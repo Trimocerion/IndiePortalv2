@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from "next";
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import {NextApiRequest, NextApiResponse} from "next";
+import {createServerSupabaseClient} from "@supabase/auth-helpers-nextjs";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const supabaseServerClient = createServerSupabaseClient({

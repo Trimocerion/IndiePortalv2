@@ -1,12 +1,10 @@
-import { createTheme,ThemeProvider } from "@mui/material";
-import { Box } from "@mui/material";
+import {Box, createTheme, PaletteMode, ThemeProvider} from "@mui/material";
 import Container from '@mui/material/Container';
-import { useState, useMemo } from "react";
-import { PaletteMode } from "@mui/material";
-import {  useSelector, } from "react-redux";
+import {useMemo, useState} from "react";
+import {useSelector,} from "react-redux";
 import Navbar from './navbar';
-import { getDesignTokens } from "../styles/theme";
-import { useRouter } from "next/router";
+import {getDesignTokens} from "../styles/theme";
+import {useRouter} from "next/router";
 
 interface Props {
   children: React.ReactNode;
@@ -37,7 +35,7 @@ export default function Layout({ children }: Props) {
     <ThemeProvider theme={theme}>
       {currentRoute !== "/signin" && <Navbar />}
       <Box component="main">
-        <Container disableGutters maxWidth={currentRoute == "/signin" ? "xl" : "md"} component="main">
+        <Container disableGutters maxWidth={"xl"} component="main">
           {children}
         </Container>
       </Box>

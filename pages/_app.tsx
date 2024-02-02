@@ -1,11 +1,11 @@
 import '../styles/globals.css';
-import { SessionContextProvider, Session } from '@supabase/auth-helpers-react';
-import { AppProps } from 'next/app';
-import { Toaster } from "react-hot-toast";
-import { Provider } from "react-redux";
+import {Session, SessionContextProvider} from '@supabase/auth-helpers-react';
+import {AppProps} from 'next/app';
+import {Toaster} from "react-hot-toast";
+import {Provider} from "react-redux";
 
-import { supabase } from "../utility/supabaseClient";
-import { store } from "../redux/store";
+import {supabase} from "../utility/supabaseClient";
+import {store} from "../redux/store";
 import Layout from '../components/layout';
 import StickyFooter from "../components/footer";
 import {useRouter} from "next/router";

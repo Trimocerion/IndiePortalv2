@@ -1,9 +1,8 @@
-import React, {useState, useEffect, ReactNode, ReactElement} from 'react'
-import { useSession, useUser } from '@supabase/auth-helpers-react'
-import { TextField, Grid, Button, DialogActions, Box, List, ListItem, Skeleton, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography } from '@mui/material';
+import React, {ReactElement, ReactNode, useEffect, useState} from 'react'
+import {useSession, useUser} from '@supabase/auth-helpers-react'
+import {Box, Button, DialogActions, Grid, Paper, Skeleton, Tab, Tabs, TextField, Typography} from '@mui/material';
 import toast from 'react-hot-toast';
-import { useDispatch } from "react-redux";
-import Head from 'next/head';
+import {useDispatch} from "react-redux";
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,15 +11,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Profile from "../components/card";
-import { setUserProfile } from '../redux/userProfileSlice'
-import { supabase } from "../utility/supabaseClient";
+import {setUserProfile} from '../redux/userProfileSlice'
+import {supabase} from "../utility/supabaseClient";
 import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
+import {TransitionProps} from '@mui/material/transitions';
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-
 
 
 interface TabPanelProps {
@@ -112,8 +110,6 @@ export default function SettingsDialog(props: SimpleDialogProps) {
             try {
                 setLoading(true)
                 if (!user) {
-                    // User is not logged in, handle accordingly (you may set default values)
-                    console.log("User is not logged in");
                     return;
                 }
 
@@ -128,11 +124,11 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                 }
 
                 if (data) {
-                    setUsername(data.username)
-                    setEmail(data.email)
-                    setAvatarUrl(data.avatar_url)
-                    setRole(data.role)
-                    setDescription(data.description)
+                    setUsername(data?.username ?? '');
+                    setEmail(data?.email ?? '');
+                    setAvatarUrl(data?.avatar_url ?? '');
+                    setRole(data?.role ?? '');
+                    setDescription(data?.description ?? '');
                     setBirthday(dayjs.utc(data.birthday).local());
                     dispatch(setUserProfile(data))
                 }

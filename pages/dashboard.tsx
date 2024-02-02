@@ -1,32 +1,17 @@
 import * as React from 'react';
-import {useMemo, useState, useEffect, SyntheticEvent} from 'react';
+import {SyntheticEvent, useEffect, useMemo, useState} from 'react';
 import {DataGrid, GridColDef, GridRowModel, GridToolbar, GridValueGetterParams} from '@mui/x-data-grid';
-import {
-    Box,
-    Typography,
-    Button,
-    ListItemAvatar,
-    Skeleton,
-    List,
-    ListItemText,
-    ListItem,
-    Avatar,
-    Tabs,
-    Tab,
-    Paper,
-    AppBar
-} from '@mui/material';
+import {AppBar, Box, Button, List, ListItem, ListItemText, Paper, Skeleton, Tab, Tabs, Typography} from '@mui/material';
 import Head from 'next/head';
-import { useRouter } from "next/router";
-import {User, useSession, useUser} from '@supabase/auth-helpers-react'
+import {useRouter} from "next/router";
+import {useSession, useUser} from '@supabase/auth-helpers-react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SettingsDialog from "../components/accountDialog"
-import { supabase } from "../utility/supabaseClient";
+import {supabase} from "../utility/supabaseClient";
 import toast from 'react-hot-toast';
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/types";
-import Image from "next/image";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/types";
 
 interface Props {
     window?: () => Window;

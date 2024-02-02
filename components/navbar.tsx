@@ -1,18 +1,38 @@
-
 import * as React from 'react';
-import { useRouter } from "next/router";
-import { useSession, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
-import { IconButton, Switch, Button, AppBar, Avatar, Box, CssBaseline, Divider, GlobalStyles, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
-import { Settings, Logout } from '@mui/icons-material';
+import {ChangeEvent, useEffect, useState} from 'react';
+import {useRouter} from "next/router";
+import {useSession, useSupabaseClient, useUser} from '@supabase/auth-helpers-react'
+import {
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    CssBaseline,
+    Divider,
+    GlobalStyles,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Switch,
+    Toolbar,
+    Tooltip,
+    Typography
+} from '@mui/material';
+import {Logout, Settings} from '@mui/icons-material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { useSelector, useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import SettingsDialog from "./accountDialog"
-import { clearUserProfile } from '../redux/userProfileSlice'
-import { RootState } from "../redux/types";
-import { toggleColorMode } from '../redux/themeSlice';
-import {useEffect, useState} from "react";
+import {clearUserProfile} from '../redux/userProfileSlice'
+import {RootState} from "../redux/types";
+import {toggleColorMode} from '../redux/themeSlice';
+import MenuIcon from '@mui/icons-material/Menu';
 
 interface ThemeState {
     darkMode: boolean;
@@ -30,6 +50,9 @@ export default function Navbar() {
     const userProfile = useSelector((state: RootState) => state.userProfile);
     const [openDialog, setOpenDialog] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState("")
+    const [menuOpen, setMenuOpen] = useState(false);
+
+
 
     const handleClickOpen = () => {
         setOpenDialog(true);
@@ -40,8 +63,10 @@ export default function Navbar() {
     };
 
     const isDarkMode = useSelector((state: ThemeState) => state.darkMode);
+    const [checked, setChecked] = useState(true);
 
-    const handleDarkModeToggle = () => {
+    const handleDarkModeToggle = (event: ChangeEvent<HTMLInputElement>) => {
+        setChecked((event.target.checked));
         dispatch(toggleColorMode());
     };
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,7 +104,11 @@ export default function Navbar() {
     };
 
             fetchAvatar();
-        }, [userProfile]);
+        }, [userProfile.avatar_url] );
+
+
+
+
 
 
     return (
@@ -87,7 +116,7 @@ export default function Navbar() {
             <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
             <CssBaseline />
             <AppBar
-                position="static"
+                position="sticky"
                 color="inherit"
                 elevation={0}
                 sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
@@ -100,22 +129,45 @@ export default function Navbar() {
                         </Typography>}
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                        <MenuItem onClick={() => router.push("/")}>
-                            <Typography sx={{ minWidth: 100 }}>Home</Typography>
-                        </MenuItem>
-                        <MenuItem onClick={() => router.push("/topratedgames")}>
-                            <Typography sx={{ minWidth: 100 }}>Top rated</Typography>
-                        </MenuItem>
-                        <MenuItem onClick={() => router.push("/latestgames")}>
-                            <Typography sx={{ minWidth: 100 }}>Latest</Typography>
-                        </MenuItem>
-                        <MenuItem onClick={() => router.push("/gamefinder")}>
-                            <Typography sx={{ minWidth: 100 }}>Find a game for me</Typography>
-                        </MenuItem>
-                        {userProfile.role === "admin" &&
-                        <MenuItem onClick={() => router.push("/dashboard")}>
-                            <Typography sx={{ minWidth: 100 }}>Dashboard</Typography>
-                        </MenuItem>
+
+
+
+                        {!isSmallScreen ? (
+                            // Responsywne menu
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                <IconButton
+                                    size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="open menu"
+                                    sx={{ mr: 2 }}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                            </Box>
+                        ) : (
+                            // Menu dla większych ekranów
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                <MenuItem onClick={() => router.push("/")} sx={{ mx: 1.5 }}>
+                                    Home
+                                </MenuItem>
+                                <MenuItem onClick={() => router.push("/")} sx={{ mx: 1.5}}>
+                                    <MenuIcon/> Menu
+                                </MenuItem>
+                                <MenuItem onClick={() => router.push("/about")} sx={{ mx: 1.5 }}>
+                                    About
+                                </MenuItem>
+                                <MenuItem onClick={() => router.push("/contact")} sx={{ mx: 1.5 }}>
+                                    Contact
+                                </MenuItem>
+                            </Box>
+                        )
+
+
+
+
+
+
                         }
 
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
@@ -183,11 +235,11 @@ export default function Navbar() {
                             <ListItemIcon>
                                 <Brightness4Icon fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText> Dark Theme</ListItemText>
+                            <ListItemText> Dark mode</ListItemText>
                             <Switch
                                 size="small"
                                 edge="end"
-                                checked={!isDarkMode} onChange={handleDarkModeToggle}
+                                checked={checked} onChange={handleDarkModeToggle}
                                 inputProps={{
                                     'aria-labelledby': 'switch-list-label-bluetooth',
                                 }}

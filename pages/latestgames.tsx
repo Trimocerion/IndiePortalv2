@@ -1,9 +1,9 @@
 // pages/latest.tsx
 import * as React from 'react';
-import { Container, Grid, Skeleton, Typography, Pagination } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { supabase } from '../utility/supabaseClient';
-import { Game } from '../redux/types';
+import {useEffect, useState} from 'react';
+import {Container, Grid, Pagination, Skeleton, Typography} from '@mui/material';
+import {supabase} from '../utility/supabaseClient';
+import {Game} from '../redux/types';
 import GameCard from '../components/gamecard';
 
 const LatestPage: React.FC = () => {

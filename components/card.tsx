@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import {Card, IconButton, Badge, Avatar, Skeleton } from '@mui/material';
-import { useUser, useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import React, {useEffect, useState} from 'react'
+import {Avatar, Badge, Card, IconButton, Skeleton} from '@mui/material';
+import {useSession, useSupabaseClient, useUser} from '@supabase/auth-helpers-react'
 import EditIcon from '@mui/icons-material/AddAPhoto';
 
 interface Profile {

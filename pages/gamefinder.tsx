@@ -1,8 +1,8 @@
 // pages/gamefinder.tsx
 import * as React from 'react';
-import { useState } from 'react';
-import { Container, Typography, Grid, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
-import { supabase } from '../utility/supabaseClient';
+import {useState} from 'react';
+import {Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from '@mui/material';
+import {supabase} from '../utility/supabaseClient';
 import GameCard from '../components/gamecard';
 
 const GameFinder: React.FC = () => {
