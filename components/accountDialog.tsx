@@ -79,12 +79,12 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     const isSmallScreen = useMediaQuery("(min-width:500px)");
 
 
-    const [username, setUsername] = useState("")
-    const [avatar_url, setAvatarUrl] = useState("")
-    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState<string | any>("")
+    const [avatar_url, setAvatarUrl] = useState<string | any>("")
+    const [email, setEmail] = useState<string | any>("")
     const [birthday, setBirthday] = useState<Dayjs | null>(null)
-    const [description, setDescription] = useState("")
-    const [role, setRole] = useState("")
+    const [description, setDescription] = useState<string | any>("")
+    const [role, setRole] = useState<string | any>("")
 
 
     dayjs.extend(utc)

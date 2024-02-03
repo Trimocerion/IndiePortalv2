@@ -1,5 +1,5 @@
 export interface UserProfileState {
-    id?:string;
+    id?:any;
     username?: any;
     avatar_url?: any;
     description?: any;
