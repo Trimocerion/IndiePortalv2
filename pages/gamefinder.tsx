@@ -1,3 +1,8 @@
+
+const GameFinder = () =>
+{}
+
+
 /*
 // pages/gamefinder.tsx
 import * as React from 'react';
@@ -121,6 +126,8 @@ const GameFinder: React.FC = () => {
         </Container>
     );
 };
+*/
+
 
 export default GameFinder;
-*/
+

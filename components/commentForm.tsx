@@ -44,7 +44,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ gameId, onCommentAdded }) => 
             } else {
                 console.log('Comment added successfully:', data);
                 setComment(''); // Wyczyść pole komentarza po dodaniu
-                // @ts-ignore
                 onCommentAdded({ ...data[0], user_id: user.id }); // Odśwież listę komentarzy
             }
         } catch (error) {

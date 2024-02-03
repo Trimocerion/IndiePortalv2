@@ -1,3 +1,7 @@
+
+export default function AdminDash(){}
+
+
 /*
 import * as React from 'react';
 import {SyntheticEvent, useEffect, useMemo, useState} from 'react';
@@ -13,6 +17,7 @@ import {supabase} from "../utility/supabaseClient";
 import toast from 'react-hot-toast';
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/types";
+
 
 interface Props {
     window?: () => Window;
