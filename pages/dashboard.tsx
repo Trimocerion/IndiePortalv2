@@ -1,3 +1,4 @@
+/*
 import * as React from 'react';
 import {SyntheticEvent, useEffect, useMemo, useState} from 'react';
 import {DataGrid, GridColDef, GridRowModel, GridToolbar, GridValueGetterParams} from '@mui/x-data-grid';
@@ -263,7 +264,7 @@ export default function AdminDashboard(props: Props) {
                     />
                 )}
 
-              {/*  {currentTab === 1 && (
+              {/!*  {currentTab === 1 && (
                     <DataGrid
                         sx={{ borderRadius: "1rem", bgcolor: 'background.paper' }}
                         autoHeight
@@ -287,8 +288,9 @@ export default function AdminDashboard(props: Props) {
                             },
                         }}
                     />
-                )}*/}
+                )}*!/}
             </Paper>
         </Box>
     );
 }
+*/

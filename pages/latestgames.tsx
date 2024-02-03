@@ -25,10 +25,12 @@ const LatestPage: React.FC = () => {
                 .range(startIdx, endIdx);
 
             if (error) {
-                throw new Error('Error fetching latest games:', error.message);
+                return;
             }
 
+            // @ts-ignore
             setLatestGames(latestGamesData || []);
+
         } catch (error: any) {
             console.error('Error fetching latest games:', error.message);
         }

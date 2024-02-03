@@ -16,7 +16,7 @@ export interface Game {
     id?: number;
     title?: string;
     description?: string;
-    cover_image_url?: string;
+    cover_image_url?: any;
     release_date?: string;
 }
 

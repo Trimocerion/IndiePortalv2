@@ -31,6 +31,7 @@ import {Toast} from "next/dist/client/components/react-dev-overlay/internal/comp
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {PostgrestError} from "@supabase/supabase-js";
+import Image from "next/image";
 
 export default function GamePage() {
     const router = useRouter();
@@ -230,7 +231,7 @@ export default function GamePage() {
         fetchRating();
         fetchComments();
         fetchRelatedGamesData();
-    }, [id]);
+    }, [id, user]);
 
 
     const handleShowAllComments = () => {
@@ -289,10 +290,13 @@ export default function GamePage() {
                             setUserRating(newRating);
                         }
                     } else {
+
+                        const converted_id = parseInt(id as string);
+
                         // Jeśli użytkownik jeszcze nie ocenił gry, dodaj nową ocenę
                         const { data: newRatingData, error: newRatingError } = await supabase
                             .from('ratings')
-                            .insert([{ game_id: id, user_id: user.id, rating: newRating }]);
+                            .insert([{ game_id: converted_id, user_id: user.id, rating: newRating }]);
 
                         if (newRatingError) {
                             console.error('Error adding new user rating:', newRatingError);
@@ -329,6 +333,7 @@ export default function GamePage() {
         };
 
         // Update the state with the new formatted comment
+        toast.success('Comment added successfully');
         setComments((prevComments) => [formattedComment, ...prevComments]);
     };
 
@@ -349,7 +354,9 @@ export default function GamePage() {
                             <Divider/>
                         </Typography>
                         <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img src={game?.cover_image_url} alt={game?.title}/>
+                            <Image src={game?.cover_image_url} alt={game?.title || 'Game cover'}
+                                      width={400} height={400}
+                            />
                         </div>
                     </Container>
                 </Grid>
