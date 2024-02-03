@@ -46,9 +46,7 @@ export default function GamePage() {
     const [showAllComments, setShowAllComments] = useState(false);
 
 
-    const handleCommentAdded = (newComment: Comment) => {
-        setComments((prevComments) => [newComment, ...prevComments]);
-    };
+
 
 
 
@@ -227,6 +225,7 @@ export default function GamePage() {
 
 
 
+
         fetchGame();
         fetchRating();
         fetchComments();
@@ -312,6 +311,26 @@ export default function GamePage() {
         }
     };
 
+
+    const handleCommentAdded = (newComment: Comment) => {
+        // Check if 'username' property exists in newComment, otherwise set a default value
+        const username = 'You';
+
+        // Create a new comment object with the necessary properties
+        const formattedComment: Comment = {
+            id: newComment.id,
+            content: newComment.content,
+            created_at: newComment.created_at,
+            user_id: newComment.user_id,
+            profiles: {
+                username: username,
+                avatar_url: newComment.profiles?.avatar_url || null, // You might want to handle avatar_url similarly
+            },
+        };
+
+        // Update the state with the new formatted comment
+        setComments((prevComments) => [formattedComment, ...prevComments]);
+    };
 
     return (
         <>
@@ -486,7 +505,7 @@ export default function GamePage() {
                                                        spacing={1}>
                                                     <Avatar src={avatarUrls[index] || undefined}/>
                                                     <Typography variant="subtitle1" color="text.primary">
-                                                        {comment.profiles.username || 'Anonymous'}
+                                                        {comment.profiles.username || undefined}
                                                     </Typography>
                                                     {/* Dodaj przycisk do usuwania komentarza */}
                                                     {user && user.id && comment.user_id === user.id && (

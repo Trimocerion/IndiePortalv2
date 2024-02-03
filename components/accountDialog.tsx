@@ -221,7 +221,6 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                             bgcolor: 'background.default',
                             borderRadius: "1rem"
                         }} elevation={0}>
-                            {session ? (
                                 <Grid container rowSpacing={1} columnSpacing={{xs: 2, sm: 3, md: 2}}>
                                     <Grid item xs={12} md={12} justifyContent="center">
                                         <Profile
@@ -272,9 +271,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                                             minDate={dayjs('1960-01-01')}
                                         />
                                     </Grid>
-
                                 </Grid>
-                            ) : (<Skeleton/>)}
                         </Paper>
                         <DialogActions>
                             <Button onClick={handleClose} variant="outlined" size="small"

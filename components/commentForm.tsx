@@ -37,7 +37,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ gameId, onCommentAdded }) => 
                         user_id: user.id,
                         content: comment.trim(),
                     },
-                ]);
+                ]).select();
 
             if (error) {
                 console.error('Error adding comment:', error.message);
