@@ -1,4 +1,3 @@
-// pages/game/[id].tsx
 
 import {useRouter} from 'next/router';
 import React, {useEffect, useState} from 'react';
@@ -483,7 +482,7 @@ export default function GamePage() {
 
                         {relatedGames && relatedGames.map((game, index) => (
 
-                            <Box key={game.id} sx={{mt: 3}}>
+                            <Box key={game.id} sx={{mt: 3}} onClick={() => router.push(`/game/${game.id}`)}>
                                 <RelatedGamecard title={game.title} id={game.id} avatar_url={game.cover_image_url}/>
                             </Box>
 

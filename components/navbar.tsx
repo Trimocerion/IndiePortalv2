@@ -17,7 +17,7 @@ import {
     ListItemIcon,
     ListItemText,
     Menu,
-    MenuItem,
+    MenuItem, MenuList,
     Switch,
     Toolbar,
     Tooltip,
@@ -154,21 +154,8 @@ export default function Navbar() {
                                 <MenuItem onClick={() => router.push("/")} sx={{ mx: 1.5}}>
                                     <MenuIcon/> Menu
                                 </MenuItem>
-                                <MenuItem onClick={() => router.push("/about")} sx={{ mx: 1.5 }}>
-                                    About
-                                </MenuItem>
-                                <MenuItem onClick={() => router.push("/contact")} sx={{ mx: 1.5 }}>
-                                    Contact
-                                </MenuItem>
                             </Box>
-                        )
-
-
-
-
-
-
-                        }
+                        )}
 
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
                             Login

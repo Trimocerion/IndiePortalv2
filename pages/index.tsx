@@ -4,6 +4,7 @@ import {Container, Grid, Pagination, Skeleton, Typography,} from '@mui/material'
 import {supabase} from '../utility/supabaseClient';
 import GameCard from '../components/gamecard';
 
+
 export default function Index() {
     const [games, setGames] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);

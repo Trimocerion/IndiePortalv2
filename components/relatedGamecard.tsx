@@ -19,10 +19,15 @@ interface RelatedGameCardProps {
 
 
 
-const RelatedGamecard:FunctionComponent<RelatedGameCardProps> = ( {title, avatar_url, id}) =>  {
+const RelatedGamecard:FunctionComponent<RelatedGameCardProps> = ( {title, avatar_url, id, genres}) =>  {
+
+
+    const genresArray = genres?.split(',');
+
+
     return (
         <Card sx={{ width: 345, minWidth: 20 }}>
-            <CardActionArea onClick={() => router.push(`/game/${id}`)}>
+            <CardActionArea>
                 <CardMedia
                     component="img"
                     height="140"
@@ -32,9 +37,6 @@ const RelatedGamecard:FunctionComponent<RelatedGameCardProps> = ( {title, avatar
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        test
                     </Typography>
                 </CardContent>
             </CardActionArea>

@@ -1,5 +1,5 @@
 // components/GameCard.tsx
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Badge,
     Card,
@@ -11,13 +11,14 @@ import {
     IconButtonProps,
     Typography
 } from '@mui/material';
-import {useRouter} from "next/router";
+import {useRouter} from 'next/router';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import toast from "react-hot-toast";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {styled} from "@mui/material/styles";
 import {useUser} from "@supabase/auth-helpers-react";
+import {supabase} from "../utility/supabaseClient";
 
 interface GameCardProps {
     title?: string;
@@ -51,7 +52,7 @@ const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,favorites, cr
 
     // Sprawdź, czy gra jest nowa (created_at < 6 miesięcy)
     const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 6 * 30 * 24 * 60 * 60 * 1000;
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
 
 
     const isFavorite = favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id); // Sprawdzamy, czy gra jest ulubioną grą użytkownika
@@ -61,9 +62,38 @@ const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,favorites, cr
     };
 
 
-    const handleFavoriteClick = () => {
-        // Tutaj możesz dodać logikę do obsługi kliknięcia gwiazdki
-        toast.success(`Game ${title} has been ${isFavorite ? 'removed from' : 'added to'} favorites!`);
+    const handleFavoriteClick = async () => {
+        try {
+
+            if(!user) {
+                // Użytkownik nie jest zalogowany
+                toast.error('You must be logged in to add games to favorites.');
+                return;
+            }
+
+            if (isFavorite) {
+                // Usuń grę z ulubionych
+                await supabase
+                    .from('favorites')
+                    .delete()
+                    .eq('game_id', id)
+                    .eq('profile_id', user?.id);
+            } else {
+                // Dodaj grę do ulubionych
+                await supabase
+                    .from('favorites')
+                    .insert([{ game_id: id, profile_id: user?.id }]);
+            }
+
+
+
+
+            // Wyświetl komunikat sukcesu
+            toast.success(`Game ${title} has been ${isFavorite ? 'removed from' : 'added to'} favorites!`);
+        } catch (error) {
+            console.error('Error handling favorite click:', error);
+            toast.error('An error occurred while processing your request. Please try again later.');
+        }
     };
 
     return (
