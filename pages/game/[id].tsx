@@ -5,10 +5,12 @@ import React, {useEffect, useState} from 'react';
 import {supabase} from '../../utility/supabaseClient';
 import {Comment, Game} from '../../redux/types';
 import {
-    Accordion, AccordionDetails,
+    Accordion,
+    AccordionDetails,
     AccordionSummary,
     Avatar,
-    Box, Button,
+    Box,
+    Button,
     Container,
     Divider,
     Grid,
@@ -19,19 +21,13 @@ import {
 } from "@mui/material";
 
 import CustomizedBreadcrumbs from "../../components/breadcrumb";
-import GameCard from "../../components/gamecard";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
-import {useTheme} from "@mui/material/styles";
 import CommentForm from "../../components/commentForm";
 import {GridExpandMoreIcon} from "@mui/x-data-grid";
 import {useUser} from "@supabase/auth-helpers-react";
 import toast from "react-hot-toast";
-import {Toast} from "next/dist/client/components/react-dev-overlay/internal/components/Toast";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {PostgrestError} from "@supabase/supabase-js";
-import Image from "next/image";
+import RelatedGamecard from "../../components/relatedGamecard";
 
 export default function GamePage() {
     const router = useRouter();
@@ -57,13 +53,15 @@ export default function GamePage() {
                 if (id && typeof id === 'string') {
                     const { data: gameData, error } = await supabase
                         .from('games')
-                        .select('*, platforms(name), age_ranges(age_range)')
+                        .select('*, platforms(name), age_ranges(age_range), favorites(*)')
                         .eq('id', id)
                         .single();
 
                     if (error) {
                         console.error('Error fetching game:', error.message);
                     } else {
+
+                        console.log(gameData);
                         setGame(gameData as Game);
 
 
@@ -140,7 +138,7 @@ export default function GamePage() {
                     const { data: commentsData, error } = await supabase
                         .from('comments')
                         .select(
-                            'id, content, created_at, user_id, profiles (username, avatar_url)'
+                            'id, content, created_at, user_id, profiles (id, username, avatar_url)'
                         )
                         .eq('game_id', id);
 
@@ -220,17 +218,11 @@ export default function GamePage() {
             }
         };
 
-        const fetchRelatedGamesData = async () => {
-                await fetchRelatedGames(id);
-        };
-
-
-
 
         fetchGame();
         fetchRating();
         fetchComments();
-        fetchRelatedGamesData();
+        fetchRelatedGames(id);
     }, [id, user]);
 
 
@@ -340,9 +332,9 @@ export default function GamePage() {
     return (
         <>
             <CustomizedBreadcrumbs/>
-            <Grid container spacing={{ xs: 2, md: 3 }}>
+            <Grid container spacing={{xs: 2, md: 3}}>
                 <Grid item xs={12} md={8} alignItems='center'>
-                    <Container  maxWidth="sm" component="main" sx={{pt: 8, pb: 6}}>
+                    <Container maxWidth="sm" component="main" sx={{pt: 8, pb: 6}}>
                         <Typography
                             component="h1"
                             variant="h6"
@@ -354,8 +346,8 @@ export default function GamePage() {
                             <Divider/>
                         </Typography>
                         <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <Image src={game?.cover_image_url} alt={game?.title || 'Game cover'}
-                                      width={400} height={400}
+                            <img src={game?.cover_image_url} alt={game?.title || 'Game cover'}
+                                 width={400} height={400}
                             />
                         </div>
                     </Container>
@@ -410,7 +402,10 @@ export default function GamePage() {
                                             {game.genres.map((genre: any, index: number) => (
                                                 <React.Fragment key={index}>
                                                     {index > 0 && <br/>}
-                                                    {genre.genres.genre_name}
+                                                    <Button variant='text'
+                                                            onClick={() => router.push(`/genre/${genre.genres.genre_name}`)}>
+                                                        {genre.genres.genre_name}
+                                                    </Button>
                                                 </React.Fragment>
                                             ))}
                                         </>
@@ -430,7 +425,11 @@ export default function GamePage() {
                             </Typography>
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
                                 <Typography variant="subtitle1" component="div" textAlign="center">
-                                    {game?.platforms.name || 'No platforms'}
+                                    {game?.platforms.name > 0 && <br/>}
+                                    <Button variant='text'
+                                            onClick={() => router.push(`/platform/${game?.platforms.name}`)}>
+                                        {game?.platforms.name || 'No platforms'}
+                                    </Button>
                                 </Typography>
                             </Box>
                         </Paper>
@@ -447,7 +446,11 @@ export default function GamePage() {
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
                                 <Typography variant="subtitle1" component="div" textAlign="center">
 
-                                    {game?.age_ranges.age_range || 'No age range'}
+
+                                    <Button variant='text'
+                                            onClick={() => router.push(`/platform/${game?.age_ranges.age_range}`)}>
+                                        {game?.age_ranges.age_range || 'No age range'}
+                                    </Button>
                                 </Typography>
                             </Box>
                         </Paper>
@@ -471,18 +474,22 @@ export default function GamePage() {
                     </Container>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Container disableGutters maxWidth="sm" component="main" sx={{pt: 8, pb: 6}}>
+                    <Container maxWidth="sm" sx={{ pt: 8, pb: 6}}>
                         <Typography component="h2" variant="h6" align="center" color="text.primary" gutterBottom>
                             Similar games
                         </Typography>
 
+                        <Stack alignItems="center">
+
                         {relatedGames && relatedGames.map((game, index) => (
+
                             <Box key={game.id} sx={{mt: 3}}>
-                                <GameCard title={game.title} id={game.id} avatar_url={game.cover_image_url}/>
+                                <RelatedGamecard title={game.title} id={game.id} avatar_url={game.cover_image_url}/>
                             </Box>
+
                         ))}
 
-
+                        </Stack>
                     </Container>
                 </Grid>
                 <Grid item xs={12} md={8}>
@@ -511,7 +518,9 @@ export default function GamePage() {
                                                 <Stack direction="row" justifyContent="flex-start" alignItems="center"
                                                        spacing={1}>
                                                     <Avatar src={avatarUrls[index] || undefined}/>
-                                                    <Typography variant="subtitle1" color="text.primary">
+                                                    <Typography component='button' variant="subtitle1"
+                                                                color="text.primary"
+                                                                onClick={() => router.push(`/profile/${comment.profiles.username}`)}>
                                                         {comment.profiles.username || undefined}
                                                     </Typography>
                                                     {/* Dodaj przycisk do usuwania komentarza */}
@@ -521,7 +530,7 @@ export default function GamePage() {
                                                             color="secondary"
                                                             startIcon={<DeleteIcon/>}
                                                             onClick={() => handleCommentDelete(comment.id)}>
-                                                        Delete
+                                                            Delete
                                                         </Button>
                                                     )}
                                                 </Stack>

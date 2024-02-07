@@ -1,5 +1,5 @@
 // CommentForm.tsx
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Button, TextField, Typography} from '@mui/material';
 import {useSupabaseClient, useUser} from "@supabase/auth-helpers-react";
 import {Comment} from "../redux/types";

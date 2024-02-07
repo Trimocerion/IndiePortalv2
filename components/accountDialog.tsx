@@ -1,6 +1,6 @@
 import React, {ReactElement, ReactNode, useEffect, useState} from 'react'
 import {useSession, useUser} from '@supabase/auth-helpers-react'
-import {Box, Button, DialogActions, Grid, Paper, Skeleton, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {Box, Button, DialogActions, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
 import toast from 'react-hot-toast';
 import {useDispatch} from "react-redux";
 import Dialog from '@mui/material/Dialog';
@@ -49,7 +49,7 @@ function TabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -82,7 +82,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     const [username, setUsername] = useState<string | any>("")
     const [avatar_url, setAvatarUrl] = useState<string | any>("")
     const [email, setEmail] = useState<string | any>("")
-    const [birthday, setBirthday] = useState<Dayjs | null>(null)
+    const [birthday, setBirthday] = useState<Dayjs>(dayjs())
     const [description, setDescription] = useState<string | any>("")
     const [role, setRole] = useState<string | any>("")
 
@@ -93,8 +93,10 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     const maxDate = today.subtract(18, 'year').format('YYYY-MM-DD')
 
 
-    const handleDateChange = (date: any) => {
-        setBirthday(date);
+    const handleDateChange = (date: Dayjs | null) => {
+        if (date) {
+            setBirthday(date);
+        }
     };
 
     const handleClose = () => {
@@ -154,7 +156,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
         username?: string,
         avatar_url?: string,
         description?: string,
-        birthday?: any
+        birthday?: Dayjs
     }) {
         try {
 
@@ -166,7 +168,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                 username,
                 avatar_url,
                 description,
-                birthday: birthday ? dayjs.utc(birthday).toISOString() : null,
+                birthday:  dayjs.utc(birthday).toISOString(),
                 updated_at: new Date().toISOString(),
             }
             let { data, error } = await supabase.from('profiles').upsert(updates).select()
@@ -226,7 +228,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                                         <Profile
                                             onUpload={(event: React.SyntheticEvent, url: string) => {
                                                 setAvatarUrl(url)
-                                                updateProfile({username, avatar_url: url, description})
+                                                updateProfile({username, avatar_url: url, description, birthday})
                                             }}
                                             url={avatar_url}
                                             username={username}

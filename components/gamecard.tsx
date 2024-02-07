@@ -1,8 +1,23 @@
 // components/GameCard.tsx
 import React from 'react';
-import {Badge, Button, Card, CardActions, CardContent, CardMedia, Typography} from '@mui/material';
+import {
+    Badge,
+    Card,
+    CardActionArea,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Collapse,
+    IconButtonProps,
+    Typography
+} from '@mui/material';
 import {useRouter} from "next/router";
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import toast from "react-hot-toast";
+import IconButton from "@mui/material/IconButton";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {styled} from "@mui/material/styles";
+import {useUser} from "@supabase/auth-helpers-react";
 
 interface GameCardProps {
     title?: string;
@@ -11,23 +26,56 @@ interface GameCardProps {
     id?: number;
     genres?: string;
     created_at?: any;
+    favorites?: any[];
 }
 
-const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,genres, created_at }) => {
+interface ExpandMoreProps extends IconButtonProps {
+    expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+}));
+
+const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,favorites, created_at, desc }) => {
 
     const router = useRouter();
+    const user = useUser();
 
     // Sprawdź, czy gra jest nowa (created_at < 6 miesięcy)
     const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 6 * 30 * 24 * 60 * 60 * 1000;
+    const [expanded, setExpanded] = React.useState(false);
 
+
+    const isFavorite = favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id); // Sprawdzamy, czy gra jest ulubioną grą użytkownika
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
+
+    const handleFavoriteClick = () => {
+        // Tutaj możesz dodać logikę do obsługi kliknięcia gwiazdki
+        toast.success(`Game ${title} has been ${isFavorite ? 'removed from' : 'added to'} favorites!`);
+    };
 
     return (
         <Card sx={{
             minHeight: '100%',
+            height: 'auto',
+            maxWidth: 345,
             backgroundColor: (theme) =>
                 theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[900],
             alignItems: 'center',
         }}>
+            <CardActionArea onClick={() => router.push(`/game/${id}`)}>
             <Badge
                 overlap="circular"
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -35,47 +83,46 @@ const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,genres, creat
                 color={"primary"}
                 invisible={!isNewGame}
             >
-            <CardMedia
-                component="img"
-                height="194"
-                image={avatar_url}
-                alt={title}
-                sx={{ width: '100%', height: 'auto', borderRadius: '8px', objectFit: 'cover' }}
+                <CardMedia
+
+                    component="img"
+                    image={avatar_url}
+                    alt={title}
+                    sx={{borderRadius: '8px', objectFit: 'cover' }}
                 />
             </Badge>
-            {/*<CardHeader
-                avatar={
-                    avatar_url ? (
-                        <img src={avatar_url} alt={title} style={{ width: '100%', height: 'auto' }} />
-                    ) : (
-                        <Skeleton variant="rectangular" width={210} height={118} />
-                    )
-                }
-                titleTypographyProps={{ align: 'center' }}
-                subheaderTypographyProps={{
-                    align: 'center',
-                }}
-                sx={{
-                    backgroundColor: (theme) =>
-                        theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[900],
-                    alignItems: 'center',
-                }}
-            />*/}
             <CardContent>
-                <Typography variant="h6" align="center">
+                <Typography paragraph variant="subtitle2" align="center">
                     {title}
                 </Typography>
-                <Typography variant="body1" align="center">
-
-                    {genres}
-
-                </Typography>
             </CardContent>
+            </CardActionArea>
             <CardActions>
-                <Button fullWidth variant="outlined" onClick={() => router.push(`/game/${id}`)}>
-                    Details
-                </Button>
+                <IconButton onClick={handleFavoriteClick} >
+                    <FavoriteIcon color={isFavorite ? 'primary' : 'action'} />
+                </IconButton>
+                <ExpandMore
+                    expand={expanded}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                >
+                    <ExpandMoreIcon />
+                </ExpandMore>
             </CardActions>
+            <Collapse in={expanded} timeout='auto' unmountOnExit>
+
+                <CardContent>
+                    <Typography paragraph>
+                        {desc}
+                    </Typography>
+
+
+                </CardContent>
+
+
+
+            </Collapse>
         </Card>
     );
 };

@@ -2,11 +2,10 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Container, Grid, Pagination, Skeleton, Typography,} from '@mui/material';
 import {supabase} from '../utility/supabaseClient';
-import {Game} from '../redux/types';
 import GameCard from '../components/gamecard';
 
 export default function Index() {
-    const [games, setGames] = useState<Game[]>([]);
+    const [games, setGames] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -19,12 +18,14 @@ export default function Index() {
 
             const { data: gamesData, error } = await supabase
                 .from('games')
-                .select('*')
+                .select('*, favorites(*)')
                 .range(startIdx, endIdx);
 
             if (error) {
                 return;
             }
+
+            console.log('Games data:', gamesData)
 
             // @ts-ignore
             setGames(gamesData || []);
@@ -66,6 +67,9 @@ export default function Index() {
             }
         };
 
+
+
+
         fetchData();
     }, [page]);
 
@@ -73,7 +77,7 @@ export default function Index() {
         <>
             <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
                 <Typography component="h1" variant="h4" align="center" color="text.primary" gutterBottom>
-                    Gry Indie
+                    Indie Games
                 </Typography>
             </Container>
 
@@ -84,7 +88,7 @@ export default function Index() {
                             {loading ? (
                                 <Skeleton variant="rectangular" height={200} />
                             ) : (
-                                <GameCard title={item.title} desc={item.description} avatar_url={item.cover_image_url} id={item.id} genres={item.genres} created_at={item.created_at} />
+                                <GameCard favorites={item.favorites} title={item.title} desc={item.description} avatar_url={item.cover_image_url} id={item.id} genres={item.genres} created_at={item.created_at} />
                             )}
                         </Grid>
                     ))}
