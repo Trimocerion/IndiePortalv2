@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       age_ranges: {
@@ -77,6 +77,36 @@ export interface Database {
           name?: string
         }
         Relationships: []
+      }
+      favorites: {
+        Row: {
+          game_id: number
+          profile_id: string
+        }
+        Insert: {
+          game_id: number
+          profile_id: string
+        }
+        Update: {
+          game_id?: number
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorites_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       game_genres: {
         Row: {
@@ -204,8 +234,9 @@ export interface Database {
           description: string | null
           email: string | null
           id: string
+          rank: number
           role: string | null
-          updated_at: string | null
+          updated_at: string
           username: string | null
         }
         Insert: {
@@ -215,8 +246,9 @@ export interface Database {
           description?: string | null
           email?: string | null
           id: string
+          rank?: number
           role?: string | null
-          updated_at?: string | null
+          updated_at: string
           username?: string | null
         }
         Update: {
@@ -226,8 +258,9 @@ export interface Database {
           description?: string | null
           email?: string | null
           id?: string
+          rank?: number
           role?: string | null
-          updated_at?: string | null
+          updated_at?: string
           username?: string | null
         }
         Relationships: [

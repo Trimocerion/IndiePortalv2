@@ -7,7 +7,7 @@ import {
     CardActions,
     CardContent,
     CardMedia,
-    Collapse,
+    Collapse, Container,
     IconButtonProps,
     Typography
 } from '@mui/material';
@@ -24,10 +24,11 @@ interface GameCardProps {
     title?: string;
     avatar_url?: string;
     desc?: string;
-    id?: number;
-    genres?: string;
+    id: number;
+    genres?: any[];
     created_at?: any;
     favorites?: any[];
+    ratings?: any[];
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -45,17 +46,29 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,favorites, created_at, desc }) => {
+const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favorites, created_at, desc, ratings }) => {
 
     const router = useRouter();
     const user = useUser();
 
     // Sprawdź, czy gra jest nowa (created_at < 6 miesięcy)
-    const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 6 * 30 * 24 * 60 * 60 * 1000;
+    const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 2 * 30 * 24 * 60 * 60 * 1000;
     const [expanded, setExpanded] = useState(false);
 
 
     const isFavorite = favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id); // Sprawdzamy, czy gra jest ulubioną grą użytkownika
+
+    //ratings w array of numbers
+    const ratingsArray = ratings?.map(rating => rating.rating);
+    const addedRatings = ratingsArray?.reduce((a, b) => a + b, 0);
+    const averageRating = ratingsArray && ratingsArray.length > 0 ? addedRatings / ratingsArray.length : 0; // Oblicz średnią ocen, jeśli ratingsArray istnieje i ma długość większą od zera
+
+    //genres w array of strings
+
+    const genresArray = genres?.map(genre => genre.genres.name);
+
+    console.log('genres:', genresArray);
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -97,63 +110,57 @@ const GameCard: React.FC<GameCardProps> = ({ title, avatar_url, id,favorites, cr
     };
 
     return (
-        <Card sx={{
-            minHeight: '100%',
-            height: 'auto',
-            maxWidth: 345,
-            backgroundColor: (theme) =>
-                theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[900],
-            alignItems: 'center',
-        }}>
-            <CardActionArea onClick={() => router.push(`/game/${id}`)}>
-            <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                badgeContent="New!"
-                color={"primary"}
-                invisible={!isNewGame}
-            >
-                <CardMedia
-
-                    component="img"
-                    image={avatar_url}
-                    alt={title}
-                    sx={{borderRadius: '8px', objectFit: 'cover' }}
-                />
-            </Badge>
-            <CardContent>
-                <Typography paragraph variant="subtitle2" align="center">
-                    {title}
-                </Typography>
-            </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <IconButton onClick={handleFavoriteClick} >
-                    <FavoriteIcon color={isFavorite ? 'primary' : 'action'} />
-                </IconButton>
-                <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon />
-                </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout='auto' unmountOnExit>
-
-                <CardContent>
-                    <Typography paragraph>
-                        {desc}
-                    </Typography>
-
-
-                </CardContent>
-
-
-
-            </Collapse>
-        </Card>
+        <Badge overlap="rectangular" badgeContent={averageRating} color="primary" anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <Card sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+            }}>
+                <CardActionArea onClick={() => router.push(`/game/${id}`)}>
+                    <Badge
+                        overlap="circular"
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        badgeContent="New!"
+                        color={"primary"}
+                        invisible={!isNewGame}
+                    >
+                        <CardMedia
+                            component="img"
+                             image={avatar_url || "https://placehold.co/300"}
+                             // image={"https://placehold.co/300"} // placeholder_image.jpg to tło zastępcze, które wyświetli się, jeśli obrazek jest niedostępny
+                            alt={title}
+                            sx={{ height: 200, objectFit: 'cover'}}
+                        />
+                    </Badge>
+                    <CardContent sx={{ flexGrow: 1,
+                    }}>
+                        <Typography variant="subtitle1" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', maxWidth: "100%" }}>
+                            {title}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions>
+                    <IconButton onClick={handleFavoriteClick}>
+                        <FavoriteIcon color={isFavorite ? 'primary' : 'action'} />
+                    </IconButton>
+                    <ExpandMore
+                        expand={expanded}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    >
+                        <ExpandMoreIcon />
+                    </ExpandMore>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        <Typography paragraph>
+                            {desc}
+                        </Typography>
+                    </CardContent>
+                </Collapse>
+            </Card>
+        </Badge>
     );
 };
 

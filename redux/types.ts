@@ -17,7 +17,7 @@ export interface Game {
     title?: string;
     description?: string;
     cover_image_url?: any;
-    release_date?: string;
+    release_date?: string | null;
 }
 
 export interface Comment {

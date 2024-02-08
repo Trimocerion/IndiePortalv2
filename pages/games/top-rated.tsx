@@ -2,9 +2,9 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Container, Grid, Pagination, Skeleton, Typography} from '@mui/material';
-import {supabase} from '../utility/supabaseClient';
-import {Game} from '../redux/types';
-import GameCard from '../components/gamecard';
+import {supabase} from '../../utility/supabaseClient';
+import {Game} from '../../redux/types';
+import GameCard from '../../components/gamecard';
 
 const LatestPage: React.FC = () => {
     const [latestGames, setLatestGames] = useState<Game[]>([]);
@@ -20,7 +20,7 @@ const LatestPage: React.FC = () => {
 
             const { data: latestGamesData, error } = await supabase
                 .from('games')
-                .select('*')
+                .select('*, favorites(*)')
                 .order('created_at', { ascending: false })
                 .range(startIdx, endIdx);
 

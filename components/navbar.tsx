@@ -50,7 +50,6 @@ export default function Navbar() {
     const userProfile = useSelector((state: RootState) => state.userProfile);
     const [openDialog, setOpenDialog] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState("")
-    const [menuOpen, setMenuOpen] = useState(false);
 
 
 
@@ -81,6 +80,22 @@ export default function Navbar() {
         supabaseClient.auth.signOut()
         dispatch(clearUserProfile())
     };
+
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+    const openMenu = Boolean(menuAnchorEl);
+
+    // Funkcja otwierająca menu
+    const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuAnchorEl(event.currentTarget);
+    };
+
+// Funkcja zamykająca menu
+    const handleMenuClose = () => {
+        setMenuAnchorEl(null);
+    };
+
+
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -132,30 +147,37 @@ export default function Navbar() {
 
 
 
-                        {!isSmallScreen ? (
-                            // Responsywne menu
                             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                                 <IconButton
                                     size="large"
                                     edge="start"
                                     color="inherit"
                                     aria-label="open menu"
+                                    aria-controls={openMenu ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openMenu ? 'true' : undefined}
                                     sx={{ mr: 2 }}
+                                    onClick={handleMenuClick} // Dodajemy obsługę kliknięcia na przycisk
                                 >
                                     <MenuIcon />
                                 </IconButton>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={menuAnchorEl}
+                                    open={openMenu}
+                                    onClose={handleMenuClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    <MenuItem onClick={() => router.push('/').then(handleMenuClose)}>Home</MenuItem>
+                                    <MenuItem onClick={() => router.push('/games/top-rated').then(handleMenuClose)}>Top rated games</MenuItem>
+                                    <MenuItem onClick={() => router.push('/games/latest').then(handleMenuClose)}>latest games</MenuItem>
+                                    <MenuItem divider onClick={() => router.push('/game-finder').then(handleMenuClose)}>Game finder</MenuItem>
+                                    {userProfile.role == 'admin' && <MenuItem color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
+                                </Menu>
                             </Box>
-                        ) : (
-                            // Menu dla większych ekranów
-                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                                <MenuItem onClick={() => router.push("/")} sx={{ mx: 1.5 }}>
-                                    Home
-                                </MenuItem>
-                                <MenuItem onClick={() => router.push("/")} sx={{ mx: 1.5}}>
-                                    <MenuIcon/> Menu
-                                </MenuItem>
-                            </Box>
-                        )}
+
 
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
                             Login

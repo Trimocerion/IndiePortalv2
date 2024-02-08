@@ -299,6 +299,8 @@ export default function GamePage() {
                             setUserRated(true);
                         }
                     }
+                    // Update the user's rank in the profiles table
+                    await updateProfileRank(user.id);
                 }
             }
         } catch (error) {
@@ -307,7 +309,7 @@ export default function GamePage() {
     };
 
 
-    const handleCommentAdded = (newComment: Comment) => {
+    const handleCommentAdded = async (newComment: Comment) => {
         // Check if 'username' property exists in newComment, otherwise set a default value
         const username = 'You';
 
@@ -326,7 +328,68 @@ export default function GamePage() {
         // Update the state with the new formatted comment
         toast.success('Comment added successfully');
         setComments((prevComments) => [formattedComment, ...prevComments]);
+
+        // Update the user's rank in the profiles table
+        await updateProfileRank(newComment.user_id);
     };
+
+
+
+    const updateProfileRank = async (userId: any) => {
+        try {
+            const { data: userProfile, error: profileError } = await supabase
+                .from('profiles')
+                .select('rank')
+                .eq('id', userId)
+                .single();
+
+            if (profileError) {
+                console.error('Error fetching user profile:', profileError.message);
+                return;
+            }
+
+            const currentRank = userProfile?.rank || 0;
+
+            const { data: userComments, error: commentsError } = await supabase
+                .from('comments')
+                .select('id')
+                .eq('user_id', userId);
+
+            if (commentsError) {
+                console.error('Error fetching user comments:', commentsError.message);
+                return;
+            }
+
+            const { data: userRatings, error: ratingsError } = await supabase
+                .from('ratings')
+                .select('id')
+                .eq('user_id', userId);
+
+            if (ratingsError) {
+                console.error('Error fetching user ratings:', ratingsError.message);
+                return;
+            }
+
+
+
+            // Update the rank by incrementing it by the total number of actions
+            // @ts-ignore
+            const updatedRank = currentRank + 1;
+
+            await supabase.from('profiles').update({ rank: updatedRank }).eq('id', userId);
+
+            if( updatedRank % 5 === 0){
+                toast.success('Congratulations! You have reached a new rank!');
+            }
+
+
+
+        } catch (error: any) {
+            console.error('Error updating profile rank:', error.message);
+        }
+    };
+
+
 
     return (
         <>

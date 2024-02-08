@@ -1,8 +1,3 @@
-
-export default function AdminDash(){}
-
-
-/*
 import * as React from 'react';
 import {SyntheticEvent, useEffect, useMemo, useState} from 'react';
 import {DataGrid, GridColDef, GridRowModel, GridToolbar, GridValueGetterParams} from '@mui/x-data-grid';
@@ -16,7 +11,7 @@ import SettingsDialog from "../components/accountDialog"
 import {supabase} from "../utility/supabaseClient";
 import toast from 'react-hot-toast';
 import {useSelector} from "react-redux";
-import {RootState} from "../redux/types";
+import {Game, RootState} from "../redux/types";
 
 
 interface Props {
@@ -24,8 +19,8 @@ interface Props {
 }
 
 export default function AdminDashboard(props: Props) {
-    const [games, setGames] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [games, setGames] = useState<any[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
     const [isLoadingGames, setIsLoadingGames] = useState(true);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
     const session = useSession();
@@ -269,7 +264,7 @@ export default function AdminDashboard(props: Props) {
                     />
                 )}
 
-              {/!*  {currentTab === 1 && (
+              {  currentTab === 1 && (
                     <DataGrid
                         sx={{ borderRadius: "1rem", bgcolor: 'background.paper' }}
                         autoHeight
@@ -293,9 +288,9 @@ export default function AdminDashboard(props: Props) {
                             },
                         }}
                     />
-                )}*!/}
+                )}
             </Paper>
         </Box>
     );
 }
-*/
+
