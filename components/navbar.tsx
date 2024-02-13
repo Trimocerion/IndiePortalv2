@@ -33,6 +33,7 @@ import {clearUserProfile} from '../redux/userProfileSlice'
 import {RootState} from "../redux/types";
 import {toggleColorMode} from '../redux/themeSlice';
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchInput from "./searchInput";
 
 interface ThemeState {
     darkMode: boolean;
@@ -145,6 +146,9 @@ export default function Navbar() {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 
+                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
+                        <SearchInput/>
+                        </Box>
 
 
                             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>

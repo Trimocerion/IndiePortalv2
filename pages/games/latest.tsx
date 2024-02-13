@@ -36,7 +36,7 @@ const LatestPage: React.FC = () => {
         }
     };
 
-    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const  handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         scrollTo({ top: 0, behavior: 'smooth' });
     };

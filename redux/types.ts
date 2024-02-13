@@ -13,6 +13,7 @@ export interface Game {
     genres?: any;
     platforms?: any;
     age_ranges?: any;
+    rating?: number;
     id?: number;
     title?: string;
     description?: string;

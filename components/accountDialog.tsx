@@ -187,7 +187,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     return (
         <>
             <Dialog
-                fullScreen={isSmallScreen ? false : true}
+                fullScreen={!isSmallScreen}
                 open={open}
                 maxWidth="sm"
                 onClose={handleClose}

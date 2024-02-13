@@ -67,7 +67,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
 
     const genresArray = genres?.map(genre => genre.genres.name);
 
-    console.log('genres:', genresArray);
+    // console.log('genres:', genresArray);
 
 
     const handleExpandClick = () => {
@@ -114,6 +114,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
             <Card sx={{
                 height: '100%',
                 display: 'flex',
+                width: '200px',
                 flexDirection: 'column',
             }}>
                 <CardActionArea onClick={() => router.push(`/game/${id}`)}>
@@ -134,7 +135,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
                     </Badge>
                     <CardContent sx={{ flexGrow: 1,
                     }}>
-                        <Typography variant="subtitle1" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', maxWidth: "100%" }}>
+                        <Typography variant="body1" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', maxWidth: "100%" }}>
                             {title}
                         </Typography>
                     </CardContent>
