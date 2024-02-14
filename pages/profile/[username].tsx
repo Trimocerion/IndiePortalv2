@@ -75,8 +75,11 @@ const UserProfile = () => {
     }
 
     return (
-        <Grid>
-            <Grid item xs={12} md={12} >
+        <Grid sx={{
+            alignItems:'center',
+            justifyContent: 'center',
+        }} >
+            <Grid container xs={12} md={12} >
                 <Paper elevation={1} sx={{
                     p: 2,
                     display: 'flex',
@@ -90,7 +93,8 @@ const UserProfile = () => {
                                 <ArrowBackIcon />
                             </IconButton>
                         </Grid>
-                            <Avatar variant="rounded" sx={{ height: 100, width: '100%' }} alt={userData.username} src={userData.avatarUrl} />
+                        <Stack justifyContent="center" alignItems="center">
+                            <Avatar variant="rounded" sx={{ height: 300, width: 300 }} alt={userData.username} src={userData.avatarUrl} />
                             <Typography variant="h4" component="h1" textAlign='center'>
                                 {userData.username}
                             </Typography>
@@ -103,11 +107,13 @@ const UserProfile = () => {
                                 </Typography>
                                     <Divider variant='middle' flexItem />
                             <Typography variant="body1" component="h1" textAlign='center' >
-                                Opis: <br />
+                                About: <br />
                                 {userData.description}
                             </Typography>
-                            <Typography variant="body1" component="h1" gutterBottom textAlign='center' >
-                                Ulubione gry: <br />
+                        <Divider variant='middle' flexItem />
+
+                        <Typography variant="body1" component="h1" gutterBottom textAlign='center' >
+                                Favorite games: <br />
                                 {favoriteGames.length > 0 &&
                                     <Card variant="outlined" sx={{ width: 300, p: 0 }}>
                                             <Carousel autoPlay>
@@ -121,6 +127,7 @@ const UserProfile = () => {
                                     </Card>
                                 }
                             </Typography>
+                        </Stack>
                     </Grid>
                 </Paper>
             </Grid>

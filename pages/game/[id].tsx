@@ -74,6 +74,7 @@ export default function GamePage() {
                             console.error('Error fetching genres:', genresError.message);
                         } else {
 
+                            // @ts-ignore
                             setGame(prevGame => {
                                     return {
                                         ...prevGame,
@@ -92,27 +93,31 @@ export default function GamePage() {
         const fetchRating = async () => {
             try {
                 if (id && typeof id === 'string') {
-                    const {data: ratingData, error: ratingError} = await supabase
+                    const { data: ratingData, error: ratingError } = await supabase
                         .from('ratings')
                         .select('rating')
-                        .eq('game_id', id)
+                        .eq('game_id', id);
 
                     if (ratingError) {
                         setRating(0);
                         setUserRating(0);
                         console.error('Error fetching rating:', ratingError);
                     } else {
+                        const totalRatings = ratingData?.length || 0; // Liczba ocen
                         // @ts-ignore
-                        const total = ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0;
-                        setRating(total);
+                        const sumOfRatings = ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0; // Suma ocen
+
+                        const averageRating = totalRatings > 0 ? sumOfRatings / totalRatings : 0; // Średnia ocena
+
+                        setRating(averageRating);
                     }
 
                     if (user) {
-                        const {data: userRatingData, error: userRatingError} = await supabase
+                        const { data: userRatingData, error: userRatingError } = await supabase
                             .from('ratings')
                             .select('*')
                             .eq('game_id', id)
-                            .eq('user_id', user.id)
+                            .eq('user_id', user.id);
 
                         if (userRatingError) {
                             console.error('Error fetching user rating:', userRatingError);
@@ -120,12 +125,9 @@ export default function GamePage() {
                             if (userRatingData && userRatingData.length > 0) {
                                 setUserRating(userRatingData[0].rating || 0);
                             }
-
-
                         }
                     }
                 }
-
             } catch (error) {
                 console.error('Error fetching rating:', error);
             }
@@ -510,7 +512,7 @@ export default function GamePage() {
 
 
                                     <Button variant='text'
-                                            onClick={() => router.push(`/platform/${game?.age_ranges.age_range}`)}>
+                                            onClick={() => router.push(`/age/${game?.age_ranges.age_range}`)}>
                                         {game?.age_ranges.age_range || 'No age range'}
                                     </Button>
                                 </Typography>

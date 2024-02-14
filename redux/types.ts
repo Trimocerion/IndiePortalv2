@@ -14,7 +14,7 @@ export interface Game {
     platforms?: any;
     age_ranges?: any;
     rating?: number;
-    id?: number;
+    id: number;
     title?: string;
     description?: string;
     cover_image_url?: any;

@@ -83,9 +83,13 @@ export default function Index() {
             </Container>
 
             <Container maxWidth="md" component="main" sx={{ mb: 8 }}>
-                <Grid container spacing={5} alignItems="flex-end">
+                <Grid container spacing={5} alignItems="center" justifyContent="center">
                     {(loading ? Array.from(new Array(8)) : games).map((item, index) => (
-                        <Grid item key={index} xs={12} sm={6} md={3}>
+                        <Grid item key={index} xs={12} sm={6} md={3} sx={{
+                            display: 'flex',
+                            justifyContent: 'center'
+
+                        }} >
                             {loading ? (
                                 <Skeleton variant="rectangular" height={200} />
                             ) : (

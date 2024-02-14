@@ -49,7 +49,7 @@ useEffect(() => {
             supabaseClient={supabase}
             appearance={{ theme: ThemeSupa }}
             magicLink
-            providers={[]}
+            providers={['google', 'github']}
             theme={theme.palette.mode}
             redirectTo="http://localhost:3000"
           />

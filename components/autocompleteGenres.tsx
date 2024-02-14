@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { AutocompleteGetTagProps } from '@mui/base/useAutocomplete';
 import useAutocomplete from '@mui/material/useAutocomplete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -157,11 +157,25 @@ const Listbox = styled('ul')(
 `,
 );
 
-export default function CustomizedHook({ genres }: { genres: any[] }) {
+
+export default function CustomizedHook({ genres, onSelectedGenresChange  }: { genres?: any[], onSelectedGenresChange: (selectedGenres: string[]) => void }) {
     const [options, setOptions] = useState<string[]>([]);
+    const [selectedGameGenres, setSelectedGameGenres] = useState<string[]>([]);
+
+    if(!genres) {
+        genres = [];
+    }
 
 
-    const gameGenres = genres.map((genre: any) => genre.genre_name);
+    useEffect(() => {
+        if (genres && genres.length > 0) {
+            setSelectedGameGenres(genres.map((genre) => genre.genre_name));
+        }
+    }, [genres]);
+
+    const gameGenres = genres ? genres.map((genre: any) => genre.genre_name) : [];
+
+
 
 
     useState(() => {
@@ -180,6 +194,30 @@ export default function CustomizedHook({ genres }: { genres: any[] }) {
         fetchData();
     });
 
+    const handleDelete = (deletedGenre: string) => {
+        const updatedGenres = selectedGameGenres.filter(genre => genre !== deletedGenre);
+        setSelectedGameGenres(updatedGenres);
+        onSelectedGenresChange(updatedGenres);
+        console.log('Selected genres:', updatedGenres);
+    };
+
+    const handleAdd = (newGenre: string) => {
+
+        if(selectedGameGenres.includes(newGenre)) {
+            return;
+        }
+
+
+        const updatedGenres = [...selectedGameGenres, newGenre];
+
+        const uniqueGenres = updatedGenres.filter((genre, index) => updatedGenres.indexOf(genre) === index);
+
+        setSelectedGameGenres(uniqueGenres);
+        onSelectedGenresChange(updatedGenres);
+
+        console.log('Selected genres:', updatedGenres);
+    };
+
     const {
         getRootProps,
         getInputLabelProps,
@@ -194,6 +232,7 @@ export default function CustomizedHook({ genres }: { genres: any[] }) {
     } = useAutocomplete({
         id: 'customized-hook-demo',
         defaultValue: gameGenres,
+        value: selectedGameGenres,
         multiple: true,
         options,
     });
@@ -203,9 +242,14 @@ export default function CustomizedHook({ genres }: { genres: any[] }) {
             <div {...getRootProps()}>
                 <Label {...getInputLabelProps()}>Genres</Label>
                 <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-                    {value.map((option: any, index: number) => (
+                    {value.map((genre: any, index: number) => (
                         // eslint-disable-next-line react/jsx-key
-                        <StyledTag label={option} {...getTagProps({ index })} />
+                        <StyledTag
+                            label={genre}
+                            {...getTagProps({ index })}
+                            key={index}
+                            onDelete={() => handleDelete(genre)}
+                        />
                     ))}
                     <input {...getInputProps()} />
                 </InputWrapper>
@@ -214,7 +258,11 @@ export default function CustomizedHook({ genres }: { genres: any[] }) {
                 <Listbox {...getListboxProps()}>
                     {(groupedOptions as typeof options).map((option, index) => (
                         // eslint-disable-next-line react/jsx-key
-                        <li {...getOptionProps({ option, index })}>
+                        <li
+                            {...getOptionProps({ option, index })}
+                            onClick={() => handleAdd(option)}
+
+                        >
                             <span>{option}</span>
                             <CheckIcon fontSize="small" />
                         </li>

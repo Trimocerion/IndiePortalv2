@@ -49,6 +49,8 @@ export default function AdminDashboard(props: Props) {
     const [openModal, setOpenModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Game | null>(null);
 
+    const [selectedCategory, setSelectedCategory] = useState<string[]>([])
+
 
     const [editedGame, setEditedGame] = useState({
         id: "",
@@ -462,6 +464,7 @@ export default function AdminDashboard(props: Props) {
                                defaultValue={selectedItem?.release_date}/>
                     <CustomizedHook
                         genres={selectedItem?.genres}
+                        onSelectedGenresChange={(selectedGenres) =>  setSelectedCategory(selectedGenres)}
                     />
 
                     <TextField id="filled-basic"

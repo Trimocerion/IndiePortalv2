@@ -61,7 +61,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
     //ratings w array of numbers
     const ratingsArray = ratings?.map(rating => rating.rating);
     const addedRatings = ratingsArray?.reduce((a, b) => a + b, 0);
-    const averageRating = ratingsArray && ratingsArray.length > 0 ? addedRatings / ratingsArray.length : 0; // Oblicz średnią ocen, jeśli ratingsArray istnieje i ma długość większą od zera
+    const averageRating = ratingsArray && ratingsArray.length > 0 ? (addedRatings / ratingsArray.length).toFixed(0) : 0; // Oblicz średnią ocen, jeśli ratingsArray istnieje i ma długość większą od zera
 
     //genres w array of strings
 
