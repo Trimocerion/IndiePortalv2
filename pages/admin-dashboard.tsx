@@ -56,6 +56,7 @@ export default function AdminDashboard(props: Props) {
         id: "",
         title: "",
         description: "",
+        genres: []
     });
 
 
@@ -82,7 +83,8 @@ export default function AdminDashboard(props: Props) {
                     game.ratings.map((rating: any) => {
                         sum += rating.rating;
                     });
-                    game.rating = sum / game.ratings.length;
+                    game.rating = sum / game.ratings.length || 0;
+                    game.rating = game.rating.toFixed(0);
                 });
 
 
@@ -223,6 +225,7 @@ export default function AdminDashboard(props: Props) {
             id: item.id,
             title: item.title,
             description: item.description,
+            genres: item.genres
         })
 
 
@@ -247,6 +250,7 @@ export default function AdminDashboard(props: Props) {
                 return;
             }
 
+            // Zaktualizuj dane gry w tabeli games
             const updates: {
                 id?: any,
                 title?: string,
@@ -255,29 +259,105 @@ export default function AdminDashboard(props: Props) {
                 id: editedGame.id,
                 title: editedGame.title,
                 description: editedGame.description
-            }
+            };
 
-            console.log('Updates:', updates)
+            console.log('Updates:', updates);
 
             let {data, error} = await supabase.from('games').upsert(updates);
             if (error) {
                 throw error;
             }
 
+            // Pobierz gatunki gry z tabeli genres
+            let {data: genresData, error: genresError} = await supabase
+                .from('genres')
+                .select('id')
+                .in('genre_name', selectedCategory);
+
+            if (genresError) {
+                throw genresError;
+            }
+
+            // Pobierz istniejące gatunki gry z tabeli game_genres
+            let {data: existingGameGenresData, error: existingGameGenresError} = await supabase
+                .from('game_genres')
+                .select('genre_id')
+                .eq('game_id', editedGame.id);
+
+            if (existingGameGenresError) {
+                throw existingGameGenresError;
+            }
+
+            const existingGenreIds = existingGameGenresData?.map((row: any) => row.genre_id);
+
+            console.log('Existing genre IDs:', existingGenreIds);
+
+            let selectedCategoryIds: any;
+
+            if(genresData?.length === 0){
+                console.log('Genres data:', genresData);
+                 selectedCategoryIds = existingGenreIds;
+            }
+            else{
+                selectedCategoryIds = genresData?.map((genre: any) => genre.id);
+            }
+
+
+            console.log('Selected category IDs:', selectedCategoryIds);
+            console.log('Game genres:', editedGame.genres );
+
+
+            // Usuń gatunki, które nie są już wybrane przez użytkownika
+            const genresToDelete = existingGenreIds?.filter((genreId: any) => !selectedCategoryIds?.includes(genreId));
+            const genresToAdd = selectedCategoryIds?.filter((genreId: any) => !existingGenreIds?.includes(genreId));
+
+            console.log('Genres to delete:', genresToDelete);
+            console.log('Genres to add:', genresToAdd);
+
+            // @ts-ignore
+            for (const genreId of genresToDelete) {
+                await supabase.from('game_genres').delete().eq('genre_id', genreId).eq('game_id', editedGame.id);
+            }
+
+
+            // Dodaj nowe rekordy do tabeli game_genres dla nowych gatunków gier
+            // @ts-ignore
+            for (const genre of genresData) {
+                // @ts-ignore
+                if (!existingGenreIds.includes(genre.id)) {
+                    await supabase.from('game_genres').insert([
+                        {
+                            // @ts-ignore
+                            game_id: editedGame.id,
+                            genre_id: genre.id,
+                        }
+                    ]);
+                }
+            }
+
+            //aktualiazacja stanu lokanlego genres w tabeli games
+
+
             // Aktualizacja stanu lokalnego po zapisaniu zmian
             const updatedGames = games.map(game => {
                 if (game.id === editedGame.id) {
-                    return { ...game, ...editedGame }; // Aktualizacja tylko edytowanej gry
+                    return { ...game, ...editedGame,
+                    }; // Aktualizacja tylko edytowanej gry
                 }
                 return game;
             });
+
+
             setGames(updatedGames);
+            setSelectedCategory([]);
             handleCloseModal();
             console.log('Game updated successfully:', data);
         } catch (error) {
             console.error('Error updating game:', error);
         }
     };
+
+
 
     const handleDeleteMovie = async (gameId: string) => {
         try {

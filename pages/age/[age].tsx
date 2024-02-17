@@ -86,7 +86,11 @@ export default function PlatformPage() {
                 <Container maxWidth="md" component="main" sx={{ mb: 8 }}>
                     <Grid container spacing={3} alignItems="center" justifyContent="center">
                         {games.map((game, index) => (
-                            <Grid item key={index} xs={12} sm={12} md={3}>
+                            <Grid item key={index} xs={12} sm={12} md={3} sx={{
+                                display: 'flex',
+                                justifyContent: 'center'
+
+                            }}>
                                 <GameCard id={game.id} title={game.title} desc={game.description} favorites={game.favorites} />
                             </Grid>
                         ))}

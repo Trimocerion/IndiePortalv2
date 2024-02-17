@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import {
     Avatar,
     Button,
-    Card,
+    Card, Container,
     Divider,
     Grid,
     List,
@@ -25,6 +25,7 @@ const UserProfile = () => {
     const router = useRouter();
     const { username } = router.query;
     const [userData, setUserData] = useState<any>(null);
+    const [avatarUrl, setAvatarUrl] = useState<any>(null);
     const [favoriteGames, setFavoriteGames] = useState<any[]>([]);
 
     useEffect(() => {
@@ -42,6 +43,21 @@ const UserProfile = () => {
 
                 setUserData(userData);
 
+
+                // @ts-ignore
+                const {data: avatarUrl, error: avatarError} = await supabase.storage.from('avatars').download(userData.avatar_url);
+
+                if (avatarError) {
+                    throw avatarError;
+                }
+
+                const avatarURL = URL.createObjectURL(avatarUrl);
+
+
+                setAvatarUrl(avatarURL);
+
+                console.log('Profile Avatar URL:', avatarUrl);
+
                 const { data: gamesData, error: gamesError } = await supabase
                     .from('favorites')
                     .select('game_id, games(*)')
@@ -51,7 +67,14 @@ const UserProfile = () => {
                     throw gamesError;
                 }
 
+
+
+
                 const favoriteGames = gamesData.map((game: any) => game.games);
+
+
+
+
 
                 console.log('Favorite games:', favoriteGames)
 
@@ -75,11 +98,9 @@ const UserProfile = () => {
     }
 
     return (
-        <Grid sx={{
-            alignItems:'center',
-            justifyContent: 'center',
-        }} >
-            <Grid container xs={12} md={12} >
+        <>
+
+
                 <Paper elevation={1} sx={{
                     p: 2,
                     display: 'flex',
@@ -87,14 +108,15 @@ const UserProfile = () => {
                     justifyContent: 'center',
                     flexDirection: 'column'
                 }}>
-                    <Grid spacing={3} justifyContent="center" alignItems='center'>
-                        <Grid item xs={2} >
-                            <IconButton onClick={handleGoBack}>
-                                <ArrowBackIcon />
-                            </IconButton>
-                        </Grid>
-                        <Stack justifyContent="center" alignItems="center">
-                            <Avatar variant="rounded" sx={{ height: 300, width: 300 }} alt={userData.username} src={userData.avatarUrl} />
+                    <Grid item xs={2} >
+                        <IconButton onClick={handleGoBack}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                    </Grid>
+                    <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+
+                    <Stack justifyContent="center" alignItems="center">
+                            <Avatar variant="rounded" sx={{ height: 300, width: 300 }} alt={userData.username} src={avatarUrl} />
                             <Typography variant="h4" component="h1" textAlign='center'>
                                 {userData.username}
                             </Typography>
@@ -128,10 +150,9 @@ const UserProfile = () => {
                                 }
                             </Typography>
                         </Stack>
-                    </Grid>
+                    </Container>
                 </Paper>
-            </Grid>
-        </Grid>
+        </>
     );
 };
 
