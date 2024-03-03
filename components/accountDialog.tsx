@@ -1,30 +1,39 @@
-import React, {ReactElement, ReactNode, useEffect, useState} from 'react'
-import {useSession, useUser} from '@supabase/auth-helpers-react'
-import {Box, Button, DialogActions, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
-import toast from 'react-hot-toast';
-import {useDispatch} from "react-redux";
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import React, { ReactElement, ReactNode, useEffect, useState } from "react";
+import { useSession, useUser } from "@supabase/auth-helpers-react";
+import {
+  Box,
+  Button,
+  DialogActions,
+  Grid,
+  Paper,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from "@mui/material";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Profile from "../components/card";
-import {setUserProfile} from '../redux/userProfileSlice'
-import {supabase} from "../utility/supabaseClient";
-import Slide from '@mui/material/Slide';
-import {TransitionProps} from '@mui/material/transitions';
-import {DatePicker} from "@mui/x-date-pickers";
-import dayjs, {Dayjs} from "dayjs";
+import { setUserProfile } from "../redux/userProfileSlice";
+import { supabase } from "../utility/supabaseClient";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
-
 interface TabPanelProps {
-    children?: ReactNode;
-    index: number;
-    value: number;
+  children?: ReactNode;
+  index: number;
+  value: number;
 }
 
 
@@ -85,6 +94,11 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     const [birthday, setBirthday] = useState<Dayjs>(dayjs())
     const [description, setDescription] = useState<string | any>("")
     const [role, setRole] = useState<string | any>("")
+    const [levelPoints, setLevelPoints] = useState<string | any>("")
+    const level = levelPoints ? levelPoints / 5 : 0
+
+
+
 
 
     dayjs.extend(utc)
@@ -132,6 +146,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                     setRole(data?.role);
                     setDescription(data?.description);
                     setBirthday(dayjs.utc(data.birthday).local());
+                    setLevelPoints(data?.rank)
                     dispatch(setUserProfile(data))
                 }
             } catch (error) {
@@ -242,6 +257,14 @@ export default function SettingsDialog(props: SimpleDialogProps) {
                                             type="text"
                                             value={username || user?.user_metadata.name}
                                             onChange={(e) => setUsername(e.target.value)}
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            disabled
+                                            size="small"
+                                            label="Level"
+                                            type="number"
+                                            value={level}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={6}>

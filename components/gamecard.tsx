@@ -94,7 +94,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
             }
             );
         }
-    }, []);
+    }, [avatar_url]);
     
 
     const handleExpandClick = () => {

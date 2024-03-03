@@ -1,10 +1,10 @@
 // genre.tsx
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { Container, Typography, Grid } from '@mui/material';
-import { supabase } from '../../utility/supabaseClient';
+import * as React from 'react';
+import {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {Container, Grid, Typography} from '@mui/material';
+import {supabase} from '../../utility/supabaseClient';
 import GameCard from "../../components/gamecard";
-import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // Załóżmy, że masz plik supabaseClient z konfiguracją Supabase
 
@@ -86,7 +86,7 @@ export default function GenrePage() {
                     <Grid container spacing={3} alignItems="center" justifyContent="center">
                         {games.map((game, index) => (
                             <Grid item key={index} xs={12} sm={12} md={3}>
-                                <GameCard id={game.id} title={game.title} desc={game.description} favorites={game.favorites} />
+                                <GameCard id={game.id} title={game.title} desc={game.description} favorites={game.favorites} avatar_url={game.cover_image_url} />
                             </Grid>
                         ))}
                     </Grid>

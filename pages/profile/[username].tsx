@@ -1,25 +1,20 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import {
-    Avatar,
-    Button,
-    Card, Container,
-    Divider,
-    Grid,
-    List,
-    ListItem,
-    ListItemButton,
-    Paper,
-    Stack,
-    Typography
-} from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import React from 'react';
-import {supabase} from "../../utility/supabaseClient";
+  Avatar,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { supabase } from "../../utility/supabaseClient";
 import Carousel from "react-material-ui-carousel";
 import RelatedGamecard from "../../components/relatedGamecard";
-import toast from "react-hot-toast";
 
 const UserProfile = () => {
     const router = useRouter();
@@ -142,7 +137,7 @@ const UserProfile = () => {
                                             {favoriteGames.map((game: any) => (
 
                                                 <React.Fragment key={game.id}>
-                                                   <RelatedGamecard desc={game.desc} title={game.title} id={game.id} avatar_url={game.avatar_url} />
+                                                   <RelatedGamecard desc={game.desc} title={game.title} id={game.id} avatar_url={game.cover_image_url} />
                                                 </React.Fragment>
                                             ))}
                                             </Carousel>
