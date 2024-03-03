@@ -1,34 +1,34 @@
 // components/GameCard.tsx
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
-    Badge,
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Collapse, Container,
-    IconButtonProps,
-    Typography
-} from '@mui/material';
-import {useRouter} from 'next/router';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+  Badge,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Collapse,
+  IconButtonProps,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import toast from "react-hot-toast";
 import IconButton from "@mui/material/IconButton";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {styled} from "@mui/material/styles";
-import {useUser} from "@supabase/auth-helpers-react";
-import {supabase} from "../utility/supabaseClient";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import { useUser } from "@supabase/auth-helpers-react";
+import { supabase } from "../utility/supabaseClient";
 
 interface GameCardProps {
-    title?: string;
-    avatar_url?: string;
-    desc?: string;
-    id: number;
-    genres?: any[];
-    created_at?: any;
-    favorites?: any[];
-    ratings?: any[];
+  title?: string;
+  avatar_url?: string;
+  desc?: string;
+  id: number;
+  genres?: any[];
+  created_at?: any;
+  favorites?: any[];
+  ratings?: any[];
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -54,6 +54,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
     // Sprawdź, czy gra jest nowa (created_at < 6 miesięcy)
     const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 2 * 30 * 24 * 60 * 60 * 1000;
     const [expanded, setExpanded] = useState(false);
+    const [gameImage, setGameImage] = useState<string | undefined>(undefined);
 
 
     const isFavorite = favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id); // Sprawdzamy, czy gra jest ulubioną grą użytkownika
@@ -69,6 +70,32 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
 
     // console.log('genres:', genresArray);
 
+
+    //downolad image from supabase storage
+     const downloadImage = async (path: any) => {
+         try {
+             const {data, error} = await supabase.storage.from('games').download(path);
+             if (error) {
+                 throw error;
+             }
+             const url = URL.createObjectURL(data);
+             return url;
+         } catch (error) {
+             console.log('Error downloading image: ', error);
+         }
+     }
+
+
+
+    useEffect(() => {
+        if (avatar_url) {
+            downloadImage(avatar_url).then((url) => {
+                setGameImage(url)
+            }
+            );
+        }
+    }, []);
+    
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -127,7 +154,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
                     >
                         <CardMedia
                             component="img"
-                             image={avatar_url || "https://placehold.co/300"}
+                             image={gameImage}
                              // image={"https://placehold.co/300"} // placeholder_image.jpg to tło zastępcze, które wyświetli się, jeśli obrazek jest niedostępny
                             alt={title}
                             sx={{ height: 200, objectFit: 'cover'}}

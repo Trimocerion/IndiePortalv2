@@ -1,18 +1,18 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
-import { AutocompleteGetTagProps } from '@mui/base/useAutocomplete';
-import useAutocomplete from '@mui/material/useAutocomplete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { styled } from '@mui/material/styles';
-import { autocompleteClasses } from '@mui/material/Autocomplete';
-import { supabase } from '../utility/supabaseClient';
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { AutocompleteGetTagProps } from "@mui/base/useAutocomplete";
+import useAutocomplete from "@mui/material/useAutocomplete";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/material/styles";
+import { autocompleteClasses } from "@mui/material/Autocomplete";
+import { supabase } from "../utility/supabaseClient";
 
-const Root = styled('div')(
-    ({ theme }) => `
+const Root = styled("div")(
+  ({ theme }) => `
   color: ${
-        theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
-    };
+    theme.palette.mode === "dark" ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,.85)"
+  };
   font-size: 14px;
 `,
 );
@@ -241,7 +241,7 @@ export default function CustomizedHook({ genres, onSelectedGenresChange  }: { ge
         <Root>
             <div {...getRootProps()}>
                 <Label {...getInputLabelProps()}>Genres</Label>
-                <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+                <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''} sx={{width:'100%'}}>
                     {value.map((genre: any, index: number) => (
                         // eslint-disable-next-line react/jsx-key
                         <StyledTag
