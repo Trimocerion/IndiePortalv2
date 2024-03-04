@@ -1,10 +1,11 @@
-import {Box, createTheme, PaletteMode, ThemeProvider} from "@mui/material";
-import Container from '@mui/material/Container';
-import {useMemo, useState} from "react";
-import {useSelector,} from "react-redux";
-import Navbar from './navbar';
-import {getDesignTokens} from "../styles/theme";
-import {useRouter} from "next/router";
+import { Box, createTheme, PaletteMode, ThemeProvider } from "@mui/material";
+import Container from "@mui/material/Container";
+import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import Navbar from "./navbar";
+import { getDesignTokens } from "../styles/theme";
+import { useRouter } from "next/router";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 interface Props {
   children: React.ReactNode;
@@ -37,6 +38,7 @@ export default function Layout({ children }: Props) {
       <Box component="main">
         <Container disableGutters maxWidth={"xl"} component="main">
           {children}
+            <SpeedInsights/>
         </Container>
       </Box>
     </ThemeProvider>

@@ -1,17 +1,16 @@
-import '../styles/globals.css';
-import {Session, SessionContextProvider} from '@supabase/auth-helpers-react';
-import {AppProps} from 'next/app';
-import {Toaster} from "react-hot-toast";
-import {Provider} from "react-redux";
+import "../styles/globals.css";
+import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
+import { AppProps } from "next/app";
+import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
 
-import {supabase} from "../utility/supabaseClient";
-import {store} from "../redux/store";
-import Layout from '../components/layout';
+import { supabase } from "../utility/supabaseClient";
+import { store } from "../redux/store";
+import Layout from "../components/layout";
 import StickyFooter from "../components/footer";
-import {useRouter} from "next/router";
-import {LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-
+import { useRouter } from "next/router";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 interface MyAppProps extends AppProps {
   initialSession: Session;
@@ -30,7 +29,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
       >
           <LocalizationProvider dateAdapter={AdapterDayjs} >
         <Layout>
-          <Component {...pageProps} />
+            <Component {...pageProps} />
             {pathname != '/signin' && <StickyFooter/> }
         </Layout>
         <Toaster/>
