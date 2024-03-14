@@ -71,6 +71,8 @@ export default function AdminDashboard(props: Props) {
     description: "",
     genres: [],
     cover_image_url: "",
+    age_range: "",
+    platform_ids: "",
   });
 
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -174,7 +176,6 @@ export default function AdminDashboard(props: Props) {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID",},
     { field: "title", headerName: "Title", flex: 1 },
-    { field: "description", headerName: "Description", flex: 1 },
     { field: "release_date", headerName: "Release Date", flex: 1 },
     {
       field: "genres",
@@ -280,6 +281,8 @@ export default function AdminDashboard(props: Props) {
       description: item.description,
       genres: item.genres,
       cover_image_url: item.cover_image_url,
+      age_range: item.age_range,
+      platform_ids: item.platform_ids
     });
   };
 
@@ -308,11 +311,15 @@ export default function AdminDashboard(props: Props) {
         title?: string;
         description?: string;
         cover_image_url?: string;
+        age_range?: any;
+        platform_ids?: any;
       } = {
         id: editedGame.id,
         title: editedGame.title,
         description: editedGame.description,
         cover_image_url: editedGame.cover_image_url,
+        age_range: editedGame.age_range,
+        platform_ids: editedGame.platform_ids,
       };
 
       console.log("Updates:", updates);
@@ -719,7 +726,7 @@ export default function AdminDashboard(props: Props) {
                 bgcolor: "background.paper",
               width: "100%",
 
-              height: "50%",
+              height: "90%",
             },
           }}
           open={openModal} onClose={handleCloseModal}>
@@ -753,12 +760,12 @@ export default function AdminDashboard(props: Props) {
             name="release_date"
             defaultValue={selectedItem?.release_date}
           />
-          <CustomizedHook
-            genres={selectedItem?.genres}
-            onSelectedGenresChange={(selectedGenres) =>
-              setSelectedCategory(selectedGenres)
-            }
-          />
+
+
+
+
+            
+
             <br/>
           <TextField
             id="filled-basic"
@@ -769,6 +776,81 @@ export default function AdminDashboard(props: Props) {
             multiline
             onChange={handleChangeEditedGame}
           />
+          </Stack>
+
+
+            <CustomizedHook
+                genres={selectedItem?.genres}
+                onSelectedGenresChange={(selectedGenres) =>
+                    setSelectedCategory(selectedGenres)
+                }
+            />
+
+          <InputLabel id="demo-simple-select-label">Age Range</InputLabel>
+          <Select
+              labelId="age-range"
+              name="age_range"
+              value={selectedItem?.age_range}
+              label="Age Range"
+              // @ts-ignore
+              onChange={handleChangeEditedGame}
+          >
+            <MenuItem value='1'>
+              3-7
+            </MenuItem>
+            <MenuItem value='2'>
+              8-12
+            </MenuItem>
+            <MenuItem value='3'>
+              13-17
+            </MenuItem>
+            <MenuItem value='4'>
+              18+
+            </MenuItem>
+          </Select>
+
+          <Stack>
+          {/* Select platforma gry */}
+          <InputLabel id="demo-simple-select-label">Platform</InputLabel>
+          <Select
+              labelId="age-range"
+              name="platform_ids"
+              value={selectedItem?.platform_ids}
+              label="Platform"
+              // @ts-ignore
+              onChange={handleChangeEditedGame}
+          >
+            <MenuItem value='1'>
+              PC
+            </MenuItem>
+            <MenuItem value='2'>
+              Playstation 5
+            </MenuItem>
+            <MenuItem value='3'>
+              Xbox series X
+            </MenuItem>
+            <MenuItem value='4'>
+              Nintendo switch
+            </MenuItem>
+            <MenuItem value='5'>
+              Xbox 360
+            </MenuItem>
+            <MenuItem value='6'>
+              PlayStation 3
+            </MenuItem>
+            <MenuItem value='7'>
+              PlayStation 4
+            </MenuItem>
+            <MenuItem value='8'>
+              Xbox One
+            </MenuItem>
+            <MenuItem value='9'>
+              Android
+            </MenuItem>
+            <MenuItem value='10'>
+              IOS
+            </MenuItem>
+          </Select>
           </Stack>
         </DialogContent>
         <DialogActions>

@@ -1,7 +1,13 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {Container, Grid, Pagination, Skeleton, Typography,} from '@mui/material';
-import {supabase} from "../../utility/supabaseClient";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import {
+  Container,
+  Grid,
+  Pagination,
+  Skeleton,
+  Typography,
+} from "@mui/material";
+import { supabase } from "../../utility/supabaseClient";
 import GameCard from "../../components/gamecard";
 
 
@@ -96,7 +102,17 @@ export default function TopRated() {
             <Container maxWidth="md" component="main" sx={{ mb: 8 }}>
                 <Grid container spacing={5} alignItems="flex-end">
                     {(loading ? Array.from(new Array(8)) : games).map((item, index) => (
-                        <Grid item key={index} xs={12} sm={6} md={3}>
+                        <Grid
+                            item
+                            key={index}
+                            xs={12}
+                            sm={12}
+                            md={3}
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
                             {loading ? (
                                 <Skeleton variant="rectangular" height={200} />
                             ) : (

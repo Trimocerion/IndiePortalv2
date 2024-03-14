@@ -95,7 +95,7 @@ export default function SettingsDialog(props: SimpleDialogProps) {
     const [description, setDescription] = useState<string | any>("")
     const [role, setRole] = useState<string | any>("")
     const [levelPoints, setLevelPoints] = useState<string | any>("")
-    const level = levelPoints ? levelPoints / 5 : 0
+    const level = levelPoints ? (levelPoints / 5).toFixed(0) : 0
 
 
 

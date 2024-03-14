@@ -480,20 +480,26 @@ export default function GamePage() {
                   readOnly
                   sx={{ ml: 1, color: "warning.main" }}
                 />
-                <Typography variant="h6" component="div" textAlign="center">
-                  Your rating
-                </Typography>
-                <Rating
-                  name="user-rating"
-                  value={userRating}
-                  precision={0.5}
-                  readOnly={!user}
-                  onChange={(event, newValue) =>
-                    handleRatingChange(newValue as number)
-                  }
-                  sx={{ ml: 1, color: "warning.main" }}
-                />
               </Box>
+              {user ? (
+                <>
+                  <Typography variant="h6" component="div" textAlign="center">
+                    Your rating
+                  </Typography>
+                  <Rating
+                    name="user-rating"
+                    value={userRating}
+                    precision={0.5}
+                    readOnly={!user}
+                    onChange={(event, newValue) =>
+                      handleRatingChange(newValue as number)
+                    }
+                    sx={{ ml: 1, color: "warning.main" }}
+                  />
+                </>
+              ) : (
+                <Typography>Please log in to rate the game</Typography>
+              )}
             </Paper>
             <Paper
               elevation={2}

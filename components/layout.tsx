@@ -30,7 +30,6 @@ export default function Layout({ children }: Props) {
   }, [colorMode]);
 
 
-  // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
   return (
     <ThemeProvider theme={theme}>

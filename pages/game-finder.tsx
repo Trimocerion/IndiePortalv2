@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   Button,
   Container,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
@@ -71,14 +72,14 @@ const GameFinder: React.FC = () => {
 
       console.log("Wszystkie gry:", gamesData);
 
-      // Filtruj gry tak zeby wyswietlaly sie tylko te z idealnymi kategoriami
+      // Filtrowanie gier
       const filteredGamesData = gamesData.filter(
         (game: any) =>
           game.game_genres.length > 0 &&
           game.game_genres.every((genre: any) =>
             selectedCategoryIds.includes(genre.genre_id),
-          ) /*&&
-          game.age_ranges.age_range === selectedAgeRange,*/,
+          ) &&
+          game.age_ranges.age_range === selectedAgeRange,
       );
 
       console.log("Filtered games:", filteredGamesData);
@@ -143,10 +144,12 @@ const GameFinder: React.FC = () => {
       {foundGames.length === 0 &&
       similarGames.length === 0 &&
       isSearchClicked ? (
-        <Typography variant="body1" align="center" color="text.secondary">
-          No exact match games found. Here are some games similar to your
-          requested game:
-        </Typography>
+        <>
+          <Divider sx={{ mt: 4 }} />
+          <Typography variant="body1" align="center" color="text.secondary">
+            No exact match games found.
+          </Typography>
+        </>
       ) : null}
 
       <Grid container spacing={3} sx={{ mt: 4 }}>

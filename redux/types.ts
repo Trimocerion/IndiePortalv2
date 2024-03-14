@@ -10,6 +10,8 @@ export interface UserProfileState {
 }
 
 export interface Game {
+    platform_ids?: any;
+    age_range?: any;
     genres?: any;
     platforms?: any;
     age_ranges?: any;
