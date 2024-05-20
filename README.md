@@ -10,23 +10,24 @@
 - Linting - ESLint
 - Formatting - Prettier
 
-## Getting Started
+## About the app
 
-First, install dev dependencies:
-```bash
-npm install
-# or
-yarn
-```
-Then run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+IndiePortalv2 is a web application designed to serve as a centralized platform for independent artists to showcase their work and connect with their audience. The app provides a user-friendly interface for both creators and fans, offering a variety of features to enhance the experience for both parties.
 
 
-To connect the backend with supabase:
+## Key Features
+* Interactive Galleries: Users can explore interactive game galleries to discover new artists and their works.
+* Search Option: A powerful search functionality allows users to quickly find games by title making it easy to discover new favorites.
+* Rating System: Games can be rated by users, allowing the community to identify highly recommended titles and provide feedback to developers.
+* Community Interaction: Users can engage with creators and other fans through comments, likes.
+* Game Recommendation System: Based on user preferences, the platform can recommend personalized game suggestions to users, enhancing their gaming experience.
+* Customizable Profiles: Users can customize their profiles with bio, profile picture, birth date, and other relevant information.
+* User Authentication: Secure authentication powered by Supabase ensures a safe and personalized experience for users.
 
-- Add `.env.local` file with both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Follow the steps outlined [here](https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs) to connect supabase with nextjs app
+## Deployment
+
+The deployment of the IndiePortal web application is handled through Vercel, providing a seamless and efficient process for hosting and managing the application.
+
+https://indie-portalv2.vercel.app/
+
+## Presentation (Screenshots) !UPCOMING
