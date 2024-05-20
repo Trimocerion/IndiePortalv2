@@ -38,13 +38,24 @@ export default function GenrePage() {
           return;
         }
 
+        const { data: gamesData1, error: gamesError1 } = await supabase
+          .from("game_genres")
+          .select("*")
+          .eq("genre_id", genreId);
+
+        console.log("Games data 1:", gamesData1);
+
+        //przypisz do bigint wartosc id gier zgamesData1
+        // @ts-ignore
+        const gamesIds = gamesData1.map((game) => BigInt(game.game_id));
+
         // Pobierz gry na podstawie ID gatunku
         const { data: gamesData, error: gamesError } = await supabase
           .from("games")
           .select(
             "*, game_genres(*), genres(*), favorites(*), platforms(*), age_ranges(*)",
           )
-          .eq("game_genres.genre_id", genreId);
+          .in("id", gamesIds);
 
         if (gamesError) {
           throw gamesError;

@@ -269,7 +269,7 @@ export default function AdminDashboard(props: Props) {
   );
 
   const handleEditMovie = async (item: any) => {
-    //handle edit movie
+    //handle edit game
 
     setSelectedItem(item);
     console.log("Selected item:", item);
@@ -290,6 +290,11 @@ export default function AdminDashboard(props: Props) {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { name, value } = event.target;
+
+
+    console.log("Name:", name);
+    console.log("Value:", value);
+
 
     setEditedGame((prevState) => ({
       ...prevState,
@@ -431,7 +436,7 @@ export default function AdminDashboard(props: Props) {
   const handleDeleteMovie = async (gameId: string) => {
     try {
       const confirmed = window.confirm(
-        "Are you sure you want to delete this user?",
+        "Are you sure you want to delete this game?",
       );
 
       if (confirmed) {
@@ -868,7 +873,7 @@ export default function AdminDashboard(props: Props) {
               bgcolor: "background.paper",
               width: "100%",
 
-              height: "50%",
+              height: "70%",
             },
           }}
           open={openAddModal} onClose={handleCloseAddModal}>
@@ -897,6 +902,16 @@ export default function AdminDashboard(props: Props) {
             />
             <br/>
 
+            <TextField
+                id="description"
+                label="Desc"
+                variant="filled"
+                value={newGame.description}
+                name="description"
+                multiline
+                onChange={handleChangeNewGame}
+            />
+            <br/>
 
             <DatePicker
                 label="Release date"
@@ -910,15 +925,7 @@ export default function AdminDashboard(props: Props) {
                 }
             />
             <br/>
-            <TextField
-                id="description"
-                label="Desc"
-                variant="filled"
-                value={newGame.description}
-                name="description"
-                multiline
-                onChange={handleChangeNewGame}
-            />
+
 
             {/* Select grupa wiekowa gry */}
               <InputLabel id="demo-simple-select-label">Age Range</InputLabel>
