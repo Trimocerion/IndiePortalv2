@@ -11,6 +11,7 @@ import StickyFooter from "../components/footer";
 import { useRouter } from "next/router";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 interface MyAppProps extends AppProps {
   initialSession: Session;
@@ -32,6 +33,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
             <Component {...pageProps} />
             {pathname != '/signin' && <StickyFooter/> }
         </Layout>
+        <SpeedInsights/>
         <Toaster/>
           </LocalizationProvider>
       </SessionContextProvider>
