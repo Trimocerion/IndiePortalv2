@@ -148,94 +148,92 @@ export default function Navbar() {
                 }}
             >
                 <Toolbar sx={{ flexWrap: 'wrap' }}>
-                    <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
-                        <Avatar sx={{ height: "2rem", width: "2rem" }} src="/logo.png" />
-                        {isSmallScreen && <Typography variant="h6" color="inherit" noWrap >
-                            IndiePortal
-                        </Typography>}
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ display: "flex", gap: 1, cursor: 'pointer' }} onClick={() => router.push('/')}>
+                            <Avatar sx={{ height: "2rem", width: "2rem" }} src="/logo.png" />
+                            {isSmallScreen && <Typography variant="h6" color="inherit" noWrap>
+                                IndiePortal
+                            </Typography>}
+                        </Box>
+                        {isSmallScreen && (
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', ml: 2 }}>
+                                {navLinks.map((link) => (
+                                    <Button
+                                        key={link.text}
+                                        onClick={() => router.push(link.path)}
+                                        sx={{ my: 1, mx: 1.5 }}
+                                    >
+                                        {link.text}
+                                    </Button>
+                                ))}
+                            </Box>
+                        )}
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-
+                    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', marginLeft: 'auto' }}>
                         {isSmallScreen && <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
-                        <SearchInput/>
+                            <SearchInput/>
                         </Box>}
-
-
-                            {isSmallScreen ? (
-                                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                        {!isSmallScreen && (
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                <IconButton
+                                    size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="open menu"
+                                    aria-controls={openMenu ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openMenu ? 'true' : undefined}
+                                    sx={{ mr: 2 }}
+                                    onClick={handleMenuClick}
+                                >
+                                    <MenuIcon sx={{ color: 'primary.main' }} />
+                                </IconButton>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={menuAnchorEl}
+                                    open={openMenu}
+                                    onClose={handleMenuClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                    PaperProps={{
+                                        sx: {
+                                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                                            backgroundColor: (theme) => theme.palette.background.paper,
+                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                        }
+                                    }}
+                                >
                                     {navLinks.map((link) => (
-                                        <Button
+                                        <MenuItem
                                             key={link.text}
-                                            onClick={() => router.push(link.path)}
-                                            sx={{ my: 1, mx: 1.5 }}
+                                            sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+                                            onClick={() => router.push(link.path).then(handleMenuClose)}
                                         >
                                             {link.text}
-                                        </Button>
+                                        </MenuItem>
                                     ))}
-                                </Box>
-                            ) : (
-                                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                                    <IconButton
-                                        size="large"
-                                        edge="start"
-                                        color="inherit"
-                                        aria-label="open menu"
-                                        aria-controls={openMenu ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={openMenu ? 'true' : undefined}
-                                        sx={{ mr: 2 }}
-                                        onClick={handleMenuClick}
-                                    >
-                                        <MenuIcon sx={{ color: 'primary.main' }} />
-                                    </IconButton>
-                                    <Menu
-                                        id="basic-menu"
-                                        anchorEl={menuAnchorEl}
-                                        open={openMenu}
-                                        onClose={handleMenuClose}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'basic-button',
-                                        }}
-                                        PaperProps={{
-                                            sx: {
-                                                border: '1px solid rgba(0, 0, 0, 0.12)',
-                                                backgroundColor: (theme) => theme.palette.background.paper,
-                                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                                            }
-                                        }}
-                                    >
-                                        {navLinks.map((link) => (
-                                            <MenuItem
-                                                key={link.text}
-                                                sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
-                                                onClick={() => router.push(link.path).then(handleMenuClose)}
-                                            >
-                                                {link.text}
-                                            </MenuItem>
-                                        ))}
-                                        <Divider />
-                                        {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
-                                    </Menu>
-                                </Box>
-                            )}
-
-
+                                    <Divider />
+                                    {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
+                                </Menu>
+                            </Box>
+                        )}
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
                             {isSmallScreen ? 'Login' : <Login />}
                         </Button>) : (
-                            <Tooltip title="Account settings">
-                                <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 2 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar src={avatarUrl || userProfile.avatar_url} sx={{ width: 32, height: 32 }} />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+                             <Tooltip title="Account settings">
+                                 <IconButton
+                                     onClick={handleClick}
+                                     size="small"
+                                     sx={{ ml: 2 }}
+                                     aria-controls={open ? 'account-menu' : undefined}
+                                     aria-haspopup="true"
+                                     aria-expanded={open ? 'true' : undefined}
+                                 >
+                                     <Avatar src={avatarUrl || userProfile.avatar_url} sx={{ width: 32, height: 32 }} />
+                                 </IconButton>
+                             </Tooltip>
+                         )}
                     </Box>
                     <Menu
                         anchorEl={anchorEl}
