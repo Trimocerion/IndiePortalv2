@@ -117,7 +117,7 @@ export default function GamePage() {
 
             const sumOfRatings =
               // @ts-ignore
-              ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0; // Suma ocen
+              ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0; // Suma ocen
 
             const averageRating =
               totalRatings > 0 ? sumOfRatings / totalRatings : 0; // Średnia ocena
@@ -335,7 +335,7 @@ export default function GamePage() {
               } else {
                 const totalRatings = ratingData?.length || 0;
                 const sumOfRatings =
-                  ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0;
+                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
                 const averageRating =
                   totalRatings > 0 ? sumOfRatings / totalRatings : 0;
                 setRating(averageRating);
@@ -374,7 +374,7 @@ export default function GamePage() {
               } else {
                 const totalRatings = ratingData?.length || 0;
                 const sumOfRatings =
-                  ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0;
+                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
                 const averageRating =
                   totalRatings > 0 ? sumOfRatings / totalRatings : 0;
                 setRating(averageRating);
