@@ -43,7 +43,7 @@ export default function Navbar() {
     const session = useSession();
     const router = useRouter();
     const user = useUser();
-    const isSmallScreen = useMediaQuery("(min-width:500px)");
+    const isSmallScreen = useMediaQuery("(min-width:900px)");
     const supabaseClient = useSupabaseClient()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -95,6 +95,13 @@ export default function Navbar() {
     const handleMenuClose = () => {
         setMenuAnchorEl(null);
     };
+
+    const navLinks = [
+        { text: 'Home', path: '/' },
+        { text: 'Top rated games', path: '/games/top-rated' },
+        { text: 'Latest games', path: '/games/latest' },
+        { text: 'Game finder', path: '/game-finder' },
+    ];
 
 
 
@@ -154,43 +161,63 @@ export default function Navbar() {
                         </Box>}
 
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                                <IconButton
-                                    size="large"
-                                    edge="start"
-                                    color="inherit"
-                                    aria-label="open menu"
-                                    aria-controls={openMenu ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={openMenu ? 'true' : undefined}
-                                    sx={{ mr: 2 }}
-                                    onClick={handleMenuClick} // Dodajemy obsługę kliknięcia na przycisk
-                                >
-                                    <MenuIcon sx={{ color: 'primary.main' }} />
-                                </IconButton>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={menuAnchorEl}
-                                    open={openMenu}
-                                    onClose={handleMenuClose}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                    }}
-                                    PaperProps={{
-                                        sx: {
-                                            border: '1px solid rgba(0, 0, 0, 0.12)',
-                                            backgroundColor: (theme) => theme.palette.background.paper,
-                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                                        }
-                                    }}
-                                >
-                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/').then(handleMenuClose)}>Home</MenuItem>
-                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/games/top-rated').then(handleMenuClose)}>Top rated games</MenuItem>
-                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/games/latest').then(handleMenuClose)}>latest games</MenuItem>
-                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} divider onClick={() => router.push('/game-finder').then(handleMenuClose)}>Game finder</MenuItem>
-                                    {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
-                                </Menu>
-                            </Box>
+                            {isSmallScreen ? (
+                                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                    {navLinks.map((link) => (
+                                        <Button
+                                            key={link.text}
+                                            onClick={() => router.push(link.path)}
+                                            sx={{ my: 1, mx: 1.5 }}
+                                        >
+                                            {link.text}
+                                        </Button>
+                                    ))}
+                                </Box>
+                            ) : (
+                                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                    <IconButton
+                                        size="large"
+                                        edge="start"
+                                        color="inherit"
+                                        aria-label="open menu"
+                                        aria-controls={openMenu ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={openMenu ? 'true' : undefined}
+                                        sx={{ mr: 2 }}
+                                        onClick={handleMenuClick}
+                                    >
+                                        <MenuIcon sx={{ color: 'primary.main' }} />
+                                    </IconButton>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={menuAnchorEl}
+                                        open={openMenu}
+                                        onClose={handleMenuClose}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button',
+                                        }}
+                                        PaperProps={{
+                                            sx: {
+                                                border: '1px solid rgba(0, 0, 0, 0.12)',
+                                                backgroundColor: (theme) => theme.palette.background.paper,
+                                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                            }
+                                        }}
+                                    >
+                                        {navLinks.map((link) => (
+                                            <MenuItem
+                                                key={link.text}
+                                                sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+                                                onClick={() => router.push(link.path).then(handleMenuClose)}
+                                            >
+                                                {link.text}
+                                            </MenuItem>
+                                        ))}
+                                        <Divider />
+                                        {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
+                                    </Menu>
+                                </Box>
+                            )}
 
 
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
