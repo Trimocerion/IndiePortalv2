@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "../../utility/supabaseClient";
 import { Comment, Game } from "../../redux/types";
 import {
@@ -448,12 +449,12 @@ export default function GamePage() {
               <Divider />
             </Typography>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <img
+              {gameImage && <Image
                 src={gameImage}
                 alt={game?.title || "Game cover"}
                 width={400}
                 height={400}
-              />
+              />}
             </div>
           </Container>
         </Grid>

@@ -162,7 +162,7 @@ const GameFinder: React.FC = () => {
             No Games Found
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            We couldn't find any games matching your criteria. Try adjusting your filters.
+            We couldn&apos;t find any games matching your criteria. Try adjusting your filters.
           </Typography>
         </Box>
       ) : null}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Image from 'next/image';
 import {Card, List, ListItem, ListItemButton, } from "@mui/material";
 import {AspectRatio} from "@mui/icons-material";
 import {ListDivider, ListItemContent, Typography} from "@mui/joy";
@@ -31,9 +32,10 @@ export default function ListStackRatio() {
                         <ListItem>
                             <ListItemButton sx={{ gap: 2 }}>
                                 <AspectRatio sx={{ flexBasis: 120 }}>
-                                    <img
-                                        srcSet={`${item.src}?w=120&fit=crop&auto=format&dpr=2 2x`}
-                                        src={`${item.src}?w=120&fit=crop&auto=format`}
+                                    <Image
+                                        src={item.src}
+                                        width={120}
+                                        height={120}
                                         alt={item.title}
                                     />
                                 </AspectRatio>

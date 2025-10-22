@@ -265,7 +265,7 @@ export default function AdminDashboard(props: Props) {
         ),
       },
     ],
-    [],
+    [user?.id],
   );
 
   const handleEditMovie = async (item: any) => {

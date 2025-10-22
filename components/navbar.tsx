@@ -127,7 +127,7 @@ export default function Navbar() {
     };
 
             fetchAvatar();
-        }, [userProfile.avatar_url] );
+        }, [userProfile.avatar_url, supabaseClient.storage] );
 
 
 
