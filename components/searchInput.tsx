@@ -5,11 +5,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { supabase } from '../utility/supabaseClient';
 import { useRouter } from "next/router";
-import { CircularProgress, useTheme } from "@mui/material"; // Zaimportuj klienta supabase
+import { Avatar, CircularProgress, Divider, ListItemAvatar, Paper, useTheme } from "@mui/material"; // Zaimportuj klienta supabase
 
 interface game {
     id: string;
     title: string;
+    cover_image_url: string;
 }
 
 const SearchInput = () => {
@@ -35,7 +36,7 @@ const SearchInput = () => {
             // Wyszukaj gry zgodne z zapytaniem wyszukiwania
             const { data, error } = await supabase
                 .from('games')
-                .select('id, title')
+                .select('id, title, cover_image_url')
                 .ilike('title', `%${query}%`); // Użyj operatora ILIKE do wyszukiwania tytułów gier
 
             if (error) {
@@ -84,15 +85,21 @@ const SearchInput = () => {
             )}
 
             {!loading && searchResults.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: theme.palette.background.default, zIndex: 999 }}>
+                <Paper elevation={3} style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999 }}>
                     <List>
-                        {searchResults.map((game: game) => (
-                            <ListItem key={game.id} onClick={() => handleGameClick(game.id)} style={{ cursor: 'pointer' }}>
-                                <ListItemText primary={game.title} style={{ color: theme.palette.text.primary }} /> {/* Ustaw kolor tekstu na kolor tekstu z motywu */}
-                            </ListItem>
+                        {searchResults.map((game: game, index: number) => (
+                            <React.Fragment key={game.id}>
+                                <ListItem onClick={() => handleGameClick(game.id)} style={{ cursor: 'pointer' }}>
+                                    <ListItemAvatar>
+                                        <Avatar src={game.cover_image_url} />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={game.title} style={{ color: theme.palette.text.primary }} />
+                                </ListItem>
+                                {index < searchResults.length - 1 && <Divider />}
+                            </React.Fragment>
                         ))}
                     </List>
-                </div>
+                </Paper>
             )}
         </div>
     );
