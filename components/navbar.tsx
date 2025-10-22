@@ -23,7 +23,7 @@ import {
     Tooltip,
     Typography
 } from '@mui/material';
-import {Logout, Settings} from '@mui/icons-material';
+import {Login, Logout, Settings} from '@mui/icons-material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import {useDispatch, useSelector} from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -43,7 +43,7 @@ export default function Navbar() {
     const session = useSession();
     const router = useRouter();
     const user = useUser();
-    const isSmallScreen = useMediaQuery("(min-width:500px)");
+    const isSmallScreen = useMediaQuery("(min-width:900px)");
     const supabaseClient = useSupabaseClient()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -96,6 +96,13 @@ export default function Navbar() {
         setMenuAnchorEl(null);
     };
 
+    const navLinks = [
+        { text: 'Home', path: '/' },
+        { text: 'Top rated games', path: '/games/top-rated' },
+        { text: 'Latest games', path: '/games/latest' },
+        { text: 'Game finder', path: '/game-finder' },
+    ];
+
 
 
     useEffect(() => {
@@ -120,7 +127,7 @@ export default function Navbar() {
     };
 
             fetchAvatar();
-        }, [userProfile.avatar_url] );
+        }, [userProfile.avatar_url, supabaseClient.storage] );
 
 
 
@@ -135,22 +142,38 @@ export default function Navbar() {
                 position="sticky"
                 color="inherit"
                 elevation={0}
-                sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+                sx={{
+                    borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                    boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
+                }}
             >
                 <Toolbar sx={{ flexWrap: 'wrap' }}>
-                    <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
-                        <Avatar sx={{ height: "2rem", width: "2rem" }} src="/logo.png" />
-                        {isSmallScreen && <Typography variant="h6" color="inherit" noWrap >
-                            IndiePortal
-                        </Typography>}
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-
-                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
-                        <SearchInput/>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ display: "flex", gap: 1, cursor: 'pointer' }} onClick={() => router.push('/')}>
+                            <Avatar sx={{ height: "2rem", width: "2rem" }} src="/logo.png" />
+                            {isSmallScreen && <Typography variant="h6" color="inherit" noWrap>
+                                IndiePortal
+                            </Typography>}
                         </Box>
-
-
+                        {isSmallScreen && (
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', ml: 2 }}>
+                                {navLinks.map((link) => (
+                                    <Button
+                                        key={link.text}
+                                        onClick={() => router.push(link.path)}
+                                        sx={{ my: 1, mx: 1.5 }}
+                                    >
+                                        {link.text}
+                                    </Button>
+                                ))}
+                            </Box>
+                        )}
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', marginLeft: 'auto' }}>
+                        {isSmallScreen && <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
+                            <SearchInput/>
+                        </Box>}
+                        {!isSmallScreen && (
                             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                                 <IconButton
                                     size="large"
@@ -161,9 +184,9 @@ export default function Navbar() {
                                     aria-haspopup="true"
                                     aria-expanded={openMenu ? 'true' : undefined}
                                     sx={{ mr: 2 }}
-                                    onClick={handleMenuClick} // Dodajemy obsługę kliknięcia na przycisk
+                                    onClick={handleMenuClick}
                                 >
-                                    <MenuIcon />
+                                    <MenuIcon sx={{ color: 'primary.main' }} />
                                 </IconButton>
                                 <Menu
                                     id="basic-menu"
@@ -173,32 +196,44 @@ export default function Navbar() {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}
+                                    PaperProps={{
+                                        sx: {
+                                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                                            backgroundColor: (theme) => theme.palette.background.paper,
+                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                        }
+                                    }}
                                 >
-                                    <MenuItem onClick={() => router.push('/').then(handleMenuClose)}>Home</MenuItem>
-                                    <MenuItem onClick={() => router.push('/games/top-rated').then(handleMenuClose)}>Top rated games</MenuItem>
-                                    <MenuItem onClick={() => router.push('/games/latest').then(handleMenuClose)}>latest games</MenuItem>
-                                    <MenuItem divider onClick={() => router.push('/game-finder').then(handleMenuClose)}>Game finder</MenuItem>
-                                    {userProfile.role == 'admin' && <MenuItem color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
+                                    {navLinks.map((link) => (
+                                        <MenuItem
+                                            key={link.text}
+                                            sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+                                            onClick={() => router.push(link.path).then(handleMenuClose)}
+                                        >
+                                            {link.text}
+                                        </MenuItem>
+                                    ))}
+                                    <Divider />
+                                    {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
                                 </Menu>
                             </Box>
-
-
-                        {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-                            Login
-                        </Button>) : (
-                            <Tooltip title="Account settings">
-                                <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 2 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar src={avatarUrl || userProfile.avatar_url} sx={{ width: 32, height: 32 }} />
-                                </IconButton>
-                            </Tooltip>
                         )}
+                        {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+                            {isSmallScreen ? 'Login' : <Login />}
+                        </Button>) : (
+                             <Tooltip title="Account settings">
+                                 <IconButton
+                                     onClick={handleClick}
+                                     size="small"
+                                     sx={{ ml: 2 }}
+                                     aria-controls={open ? 'account-menu' : undefined}
+                                     aria-haspopup="true"
+                                     aria-expanded={open ? 'true' : undefined}
+                                 >
+                                     <Avatar src={avatarUrl || userProfile.avatar_url} sx={{ width: 32, height: 32 }} />
+                                 </IconButton>
+                             </Tooltip>
+                         )}
                     </Box>
                     <Menu
                         anchorEl={anchorEl}
