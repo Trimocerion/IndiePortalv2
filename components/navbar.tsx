@@ -23,7 +23,7 @@ import {
     Tooltip,
     Typography
 } from '@mui/material';
-import {Logout, Settings} from '@mui/icons-material';
+import {Login, Logout, Settings} from '@mui/icons-material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import {useDispatch, useSelector} from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -135,7 +135,10 @@ export default function Navbar() {
                 position="sticky"
                 color="inherit"
                 elevation={0}
-                sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+                sx={{
+                    borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                    boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
+                }}
             >
                 <Toolbar sx={{ flexWrap: 'wrap' }}>
                     <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
@@ -146,9 +149,9 @@ export default function Navbar() {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
+                        {isSmallScreen && <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', pr: 2 }}>
                         <SearchInput/>
-                        </Box>
+                        </Box>}
 
 
                             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -163,7 +166,7 @@ export default function Navbar() {
                                     sx={{ mr: 2 }}
                                     onClick={handleMenuClick} // Dodajemy obsługę kliknięcia na przycisk
                                 >
-                                    <MenuIcon />
+                                    <MenuIcon sx={{ color: 'primary.main' }} />
                                 </IconButton>
                                 <Menu
                                     id="basic-menu"
@@ -173,18 +176,25 @@ export default function Navbar() {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}
+                                    PaperProps={{
+                                        sx: {
+                                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                                            backgroundColor: (theme) => theme.palette.background.paper,
+                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                        }
+                                    }}
                                 >
-                                    <MenuItem onClick={() => router.push('/').then(handleMenuClose)}>Home</MenuItem>
-                                    <MenuItem onClick={() => router.push('/games/top-rated').then(handleMenuClose)}>Top rated games</MenuItem>
-                                    <MenuItem onClick={() => router.push('/games/latest').then(handleMenuClose)}>latest games</MenuItem>
-                                    <MenuItem divider onClick={() => router.push('/game-finder').then(handleMenuClose)}>Game finder</MenuItem>
-                                    {userProfile.role == 'admin' && <MenuItem color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
+                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/').then(handleMenuClose)}>Home</MenuItem>
+                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/games/top-rated').then(handleMenuClose)}>Top rated games</MenuItem>
+                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={() => router.push('/games/latest').then(handleMenuClose)}>latest games</MenuItem>
+                                    <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} divider onClick={() => router.push('/game-finder').then(handleMenuClose)}>Game finder</MenuItem>
+                                    {userProfile.role == 'admin' && <MenuItem sx={{ borderRadius: '5px', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} color="primary" onClick={() => router.push('/admin-dashboard').then(handleMenuClose)}>Admin Dashboard</MenuItem>}
                                 </Menu>
                             </Box>
 
 
                         {!session ? (<Button onClick={() => router.push("/signin")} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-                            Login
+                            {isSmallScreen ? 'Login' : <Login />}
                         </Button>) : (
                             <Tooltip title="Account settings">
                                 <IconButton
