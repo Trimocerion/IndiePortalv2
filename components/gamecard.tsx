@@ -55,9 +55,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
     const isNewGame = (new Date().getTime() - new Date(created_at).getTime()) < 2 * 30 * 24 * 60 * 60 * 1000;
     const [expanded, setExpanded] = useState(false);
     const [gameImage, setGameImage] = useState<string | undefined>(undefined);
-
-
-    const isFavorite = favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id); // Sprawdzamy, czy gra jest ulubioną grą użytkownika
+    const [isFavoriteState, setIsFavoriteState] = useState(favorites && favorites.some(favorite => favorite.game_id === id && favorite.profile_id === user?.id));
 
     //ratings w array of numbers
     const ratingsArray = ratings?.map(rating => rating.rating);
@@ -111,7 +109,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
                 return;
             }
 
-            if (isFavorite) {
+            if (isFavoriteState) {
                 // Usuń grę z ulubionych
                 await supabase
                     .from('favorites')
@@ -125,11 +123,11 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
                     .insert([{ game_id: id, profile_id: user?.id }]);
             }
 
-
+            setIsFavoriteState(!isFavoriteState);
 
 
             // Wyświetl komunikat sukcesu
-            toast.success(`Game ${title} has been ${isFavorite ? 'removed from' : 'added to'} favorites!`);
+            toast.success(`Game ${title} has been ${isFavoriteState ? 'removed from' : 'added to'} favorites!`);
         } catch (error) {
             console.error('Error handling favorite click:', error);
             toast.error('An error occurred while processing your request. Please try again later.');
@@ -169,7 +167,7 @@ const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favor
                 </CardActionArea>
                 <CardActions>
                     <IconButton onClick={handleFavoriteClick}>
-                        <FavoriteIcon color={isFavorite ? 'primary' : 'action'} />
+                        <FavoriteIcon color={isFavoriteState ? 'primary' : 'action'} />
                     </IconButton>
                     <ExpandMore
                         expand={expanded}
