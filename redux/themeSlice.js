@@ -4,7 +4,7 @@ const cachedTheme =
   typeof window !== "undefined" && window.localStorage.getItem("darkMode");
 
 const initialState = {
-  darkMode: !!JSON.parse(cachedTheme),
+  darkMode: cachedTheme === null ? true : !!JSON.parse(cachedTheme),
 };
 
 export const themeSlice = createSlice({
