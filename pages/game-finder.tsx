@@ -3,6 +3,7 @@ import * as React from "react";
 import { useState } from "react";
 import {
   Button,
+  Box,
   Container,
   Divider,
   FormControl,
@@ -10,6 +11,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  CircularProgress,
+  Stack,
   Typography,
 } from "@mui/material";
 import { supabase } from "../utility/supabaseClient";
@@ -23,10 +26,12 @@ const GameFinder: React.FC = () => {
   const [foundGames, setFoundGames] = useState([]);
   const [similarGames, setSimilarGames] = useState<Game[]>([]);
   const [isSearchClicked, setIsSearchClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const ageRanges = ["3-7", "8-12", "13-17", "18+"];
 
   const handleSearch = async () => {
+    setLoading(true);
     try {
       console.log("Selected category:", selectedCategory);
 
@@ -98,20 +103,31 @@ const GameFinder: React.FC = () => {
       setFoundGames(filteredGamesData || []);
     } catch (error: any) {
       console.error("Error searching for games:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container maxWidth="md" component="main" sx={{ mt: 6 }}>
-      <Typography variant="h5" align="center" color="text.primary" gutterBottom>
-        Game Finder
+      <Typography variant="h4" align="center" color="text.primary" gutterBottom>
+        Find Your Next Favorite Game
+      </Typography>
+      <Typography variant="h6" align="center" color="text.secondary" paragraph>
+        Use the filters below to discover games tailored to your preferences.
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={6}>
-          <br />
-
-          <FormControl sx={{ width: "50%" }}>
+      <Box
+        sx={{
+          p: 3,
+          mb: 4,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "grey.800" : "grey.100",
+          borderRadius: 2,
+        }}
+      >
+        <Stack spacing={2}>
+          <FormControl fullWidth>
             <InputLabel id="age-range-label">Age Range</InputLabel>
             <Select
               labelId="age-range-label"
@@ -127,30 +143,35 @@ const GameFinder: React.FC = () => {
               ))}
             </Select>
           </FormControl>
-
           <AutocompleteGenres
             onSelectedGenresChange={(selectedGenres) =>
               setSelectedCategory(selectedGenres)
             }
           />
-
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={handleSearch} fullWidth>
-              Search
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
+          <Button variant="contained" onClick={handleSearch} size="large" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'Search'}
+          </Button>
+        </Stack>
+      </Box>
       {foundGames.length === 0 &&
       similarGames.length === 0 &&
-      isSearchClicked ? (
-        <>
-          <Divider sx={{ mt: 4 }} />
-          <Typography variant="body1" align="center" color="text.secondary">
-            No exact match games found.
+      isSearchClicked &&
+      !loading ? (
+        <Box sx={{ mt: 4, p: 3, textAlign: 'center', backgroundColor: 'grey.100', borderRadius: 2 }}>
+          <Typography variant="h6" color="text.primary">
+            No Games Found
           </Typography>
-        </>
+          <Typography variant="body1" color="text.secondary">
+            We couldn't find any games matching your criteria. Try adjusting your filters.
+          </Typography>
+        </Box>
       ) : null}
+
+      {foundGames.length > 0 && (
+        <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
+          Search Results
+        </Typography>
+      )}
 
       <Grid container spacing={3} sx={{ mt: 4 }}>
         {foundGames.map((game: Game) => (
