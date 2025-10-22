@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Avatar, Badge, Card, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/AddAPhoto";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -14,11 +14,7 @@ const GameAvatar: React.FC<GameAvatarProps> = ({ url, onUpload, gameName }) => {
     const [uploading, setUploading] = useState<boolean>(false);
     const supabase = useSupabaseClient();
 
-    useEffect(() => {
-        if (url) downloadImage(url);
-    }, [url]);
-
-    async function downloadImage(path: any) {
+    const downloadImage = useCallback(async (path: any) => {
         try {
             const { data, error } = await supabase.storage.from('games').download(path)
             if (error) {
@@ -29,7 +25,11 @@ const GameAvatar: React.FC<GameAvatarProps> = ({ url, onUpload, gameName }) => {
         } catch (error) {
             console.log('Error downloading image: ', error)
         }
-    }
+    }, [supabase.storage]);
+
+    useEffect(() => {
+        if (url) downloadImage(url);
+    }, [url, downloadImage]);
 
     async function uploadAvatar(event: any) {
         try {

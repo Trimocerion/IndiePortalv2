@@ -1,6 +1,6 @@
 import { Box, createTheme, PaletteMode, ThemeProvider } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "./navbar";
 import { getDesignTokens } from "../styles/theme";
@@ -23,10 +23,8 @@ export default function Layout({ children }: Props) {
   const router = useRouter();
   const currentRoute:string = router.pathname;
   const colorMode:Boolean = useSelector((state: RootState) => state.theme.darkMode);
-  useMemo(() => {
-    setMode((prevMode: PaletteMode) =>
-      prevMode === "light" ? "dark" : "light"
-    );
+  useEffect(() => {
+    setMode(colorMode ? "dark" : "light");
   }, [colorMode]);
 
 

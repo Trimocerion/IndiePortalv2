@@ -13,6 +13,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from '@vercel/analytics/react';
+import { setTheme } from "../redux/themeSlice";
+import { useEffect } from "react";
 
 interface MyAppProps extends AppProps {
   initialSession: Session;
@@ -22,6 +24,13 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, pageProps, initialSession, } = props;
   const router = useRouter();
   const pathname = router.pathname;
+
+  useEffect(() => {
+    const cachedTheme = window.localStorage.getItem("darkMode");
+    if (cachedTheme) {
+      store.dispatch(setTheme(JSON.parse(cachedTheme)));
+    }
+  }, []);
 
   return (
     <Provider store={store}>

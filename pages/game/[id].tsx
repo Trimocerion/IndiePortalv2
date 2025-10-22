@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "../../utility/supabaseClient";
 import { Comment, Game } from "../../redux/types";
 import {
@@ -322,6 +323,23 @@ export default function GamePage() {
 
               // Zaktualizuj stan oceny użytkownika
               setUserRating(newRating);
+
+              // Pobierz wszystkie oceny dla gry i oblicz nową średnią
+              const { data: ratingData, error: ratingError } = await supabase
+                .from("ratings")
+                .select("rating")
+                .eq("game_id", id);
+
+              if (ratingError) {
+                console.error("Error fetching rating:", ratingError);
+              } else {
+                const totalRatings = ratingData?.length || 0;
+                const sumOfRatings =
+                  ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0;
+                const averageRating =
+                  totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+                setRating(averageRating);
+              }
             }
           } else {
             const converted_id = parseInt(id as string);
@@ -344,6 +362,23 @@ export default function GamePage() {
               // Zaktualizuj stan oceny użytkownika i ustaw flagę, że użytkownik ocenił grę
               setUserRating(newRating);
               setUserRated(true);
+
+              // Pobierz wszystkie oceny dla gry i oblicz nową średnią
+              const { data: ratingData, error: ratingError } = await supabase
+                .from("ratings")
+                .select("rating")
+                .eq("game_id", id);
+
+              if (ratingError) {
+                console.error("Error fetching rating:", ratingError);
+              } else {
+                const totalRatings = ratingData?.length || 0;
+                const sumOfRatings =
+                  ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0;
+                const averageRating =
+                  totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+                setRating(averageRating);
+              }
             }
           }
           // Update the user's rank in the profiles table
@@ -448,12 +483,12 @@ export default function GamePage() {
               <Divider />
             </Typography>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <img
+              {gameImage && <Image
                 src={gameImage}
                 alt={game?.title || "Game cover"}
                 width={400}
                 height={400}
-              />
+              />}
             </div>
           </Container>
         </Grid>
