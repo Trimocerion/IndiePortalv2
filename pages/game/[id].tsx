@@ -117,7 +117,7 @@ export default function GamePage() {
 
             const sumOfRatings =
               // @ts-ignore
-              ratingData?.reduce((sum, rating) => sum + rating.rating, 0) || 0; // Suma ocen
+              ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0; // Suma ocen
 
             const averageRating =
               totalRatings > 0 ? sumOfRatings / totalRatings : 0; // Średnia ocena
@@ -323,6 +323,23 @@ export default function GamePage() {
 
               // Zaktualizuj stan oceny użytkownika
               setUserRating(newRating);
+
+              // Pobierz wszystkie oceny dla gry i oblicz nową średnią
+              const { data: ratingData, error: ratingError } = await supabase
+                .from("ratings")
+                .select("rating")
+                .eq("game_id", id);
+
+              if (ratingError) {
+                console.error("Error fetching rating:", ratingError);
+              } else {
+                const totalRatings = ratingData?.length || 0;
+                const sumOfRatings =
+                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
+                const averageRating =
+                  totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+                setRating(averageRating);
+              }
             }
           } else {
             const converted_id = parseInt(id as string);
@@ -345,6 +362,23 @@ export default function GamePage() {
               // Zaktualizuj stan oceny użytkownika i ustaw flagę, że użytkownik ocenił grę
               setUserRating(newRating);
               setUserRated(true);
+
+              // Pobierz wszystkie oceny dla gry i oblicz nową średnią
+              const { data: ratingData, error: ratingError } = await supabase
+                .from("ratings")
+                .select("rating")
+                .eq("game_id", id);
+
+              if (ratingError) {
+                console.error("Error fetching rating:", ratingError);
+              } else {
+                const totalRatings = ratingData?.length || 0;
+                const sumOfRatings =
+                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
+                const averageRating =
+                  totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+                setRating(averageRating);
+              }
             }
           }
           // Update the user's rank in the profiles table

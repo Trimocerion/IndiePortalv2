@@ -14,6 +14,9 @@ export const themeSlice = createSlice({
     toggleColorMode: (state) => {
       state.darkMode = !state.darkMode;
     },
+    setTheme: (state, action) => {
+      state.darkMode = action.payload;
+    },
   },
 });
 
@@ -22,13 +25,14 @@ export const themeSlice = createSlice({
 // This will call the thunk with the `dispatch` function as the first argument.
 // Async code can then be executed and other actions can be dispatched
 export const asyncToggleTheme = () => (dispatch) => {
-  const isDarkMode = !!JSON.parse(cachedTheme);
-  typeof window !== "undefined" &&
+  if (typeof window !== "undefined") {
+    const isDarkMode = !!JSON.parse(window.localStorage.getItem("darkMode"));
     window.localStorage.setItem("darkMode", !isDarkMode);
+  }
   dispatch(toggleColorMode());
 };
 
 // Action creators are generated for each case reducer function
-export const { toggleColorMode } = themeSlice.actions;
+export const { toggleColorMode, setTheme } = themeSlice.actions;
 
 export default themeSlice.reducer;
