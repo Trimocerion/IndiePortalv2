@@ -48,7 +48,7 @@ export default function GamePage() {
           const { data: gameData, error } = await supabase
             .from("games")
             .select("*, platforms(name), age_ranges(age_range), favorites(*)")
-            .eq("id", id)
+            .eq("id", Number(id))
             .single();
 
           if (error) {
@@ -65,7 +65,7 @@ export default function GamePage() {
             const { data: genresData, error: genresError } = await supabase
               .from("game_genres")
               .select("game_id, genre_id, genres (genre_name)")
-              .eq("game_id", id);
+              .eq("game_id", Number(id));
 
             if (genresError) {
               console.error("Error fetching genres:", genresError.message);
@@ -106,7 +106,7 @@ export default function GamePage() {
           const { data: ratingData, error: ratingError } = await supabase
             .from("ratings")
             .select("rating")
-            .eq("game_id", id);
+            .eq("game_id", Number(id));
 
           if (ratingError) {
             setRating(0);
@@ -130,7 +130,7 @@ export default function GamePage() {
               await supabase
                 .from("ratings")
                 .select("*")
-                .eq("game_id", id)
+                .eq("game_id", Number(id))
                 .eq("user_id", user.id);
 
             if (userRatingError) {
@@ -155,7 +155,7 @@ export default function GamePage() {
             .select(
               "id, content, created_at, user_id, profiles (id, username, avatar_url)",
             )
-            .eq("game_id", id);
+            .eq("game_id", Number(id));
 
           if (error) {
             console.error("Error fetching comments:", error.message);
@@ -172,7 +172,7 @@ export default function GamePage() {
 
             // Pobieranie avatara dla każdego komentarza
             const avatarPromises =
-              commentsData?.map(async (comment) => {
+              commentsData?.map(async (comment: Comment) => {
                 const {
                   data,
                   error,
@@ -211,7 +211,7 @@ export default function GamePage() {
         }
 
         const originalGenreIds = originalGenresData.map(
-          (genre) => genre.genre_id,
+          (genre: { genre_id: number }) => genre.genre_id,
         );
 
         const { data: relatedGamesData, error: relatedGamesError } =
@@ -265,6 +265,7 @@ export default function GamePage() {
 
   const handleCommentDelete = async (commentId?: number) => {
     try {
+      if (!commentId) return;
       const { error } = await supabase
         .from("comments")
         .delete()
@@ -295,7 +296,7 @@ export default function GamePage() {
           await supabase
             .from("ratings")
             .select("rating, id") // Dodano pobieranie id oceny użytkownika
-            .eq("game_id", id)
+            .eq("game_id", Number(id))
             .eq("user_id", user.id);
 
         if (existingUserRatingError) {
@@ -328,14 +329,14 @@ export default function GamePage() {
               const { data: ratingData, error: ratingError } = await supabase
                 .from("ratings")
                 .select("rating")
-                .eq("game_id", id);
+                .eq("game_id", Number(id));
 
               if (ratingError) {
                 console.error("Error fetching rating:", ratingError);
               } else {
                 const totalRatings = ratingData?.length || 0;
                 const sumOfRatings =
-                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
+                  ratingData?.reduce((sum: number, rating: { rating: number | null }) => sum + (rating.rating || 0), 0) || 0;
                 const averageRating =
                   totalRatings > 0 ? sumOfRatings / totalRatings : 0;
                 setRating(averageRating);
@@ -367,14 +368,14 @@ export default function GamePage() {
               const { data: ratingData, error: ratingError } = await supabase
                 .from("ratings")
                 .select("rating")
-                .eq("game_id", id);
+                .eq("game_id", Number(id));
 
               if (ratingError) {
                 console.error("Error fetching rating:", ratingError);
               } else {
                 const totalRatings = ratingData?.length || 0;
                 const sumOfRatings =
-                  ratingData?.reduce((sum, rating) => sum + (rating.rating || 0), 0) || 0;
+                  ratingData?.reduce((sum: number, rating: { rating: number | null }) => sum + (rating.rating || 0), 0) || 0;
                 const averageRating =
                   totalRatings > 0 ? sumOfRatings / totalRatings : 0;
                 setRating(averageRating);

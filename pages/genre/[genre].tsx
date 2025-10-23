@@ -23,7 +23,7 @@ export default function GenrePage() {
         const { data: genreData, error: genreError } = await supabase
           .from("genres")
           .select("id")
-          .eq("genre_name", genre)
+          .eq("genre_name", Array.isArray(genre) ? genre[0] : genre)
           .single();
 
         if (genreError) {
@@ -47,7 +47,7 @@ export default function GenrePage() {
 
         //przypisz do bigint wartosc id gier zgamesData1
         // @ts-ignore
-        const gamesIds = gamesData1.map((game) => BigInt(game.game_id));
+        const gamesIds = gamesData1.map((game) => Number(game.game_id));
 
         // Pobierz gry na podstawie ID gatunku
         const { data: gamesData, error: gamesError } = await supabase

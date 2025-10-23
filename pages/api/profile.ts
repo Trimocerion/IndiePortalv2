@@ -13,11 +13,14 @@ type Profile = {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const user  = useUser();
   try {
+    if (!user || !user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     // Pobierz profil uzytkownika z bazy danych
     let { data, error, status } = await supabase
       .from("profiles")
       .select(`*`)
-      .eq("id", user?.id)
+      .eq("id", user.id)
       .single();
     // Zwroc dane
     res.status(200).json(data);

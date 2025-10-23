@@ -26,8 +26,8 @@ export interface Game {
 export interface Comment {
     profiles?: any;
     id?: number;
-    content?: string;
-    user_id?: string;
+    content?: string | null;
+    user_id?: string | null;
     game_id?: string;
     created_at?: string;
 }

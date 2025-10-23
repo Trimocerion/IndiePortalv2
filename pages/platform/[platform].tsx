@@ -23,7 +23,7 @@ export default function PlatformPage() {
         const { data: genreData, error: genreError } = await supabase
           .from("platforms")
           .select("id")
-          .eq("name", platform)
+          .eq("name", Array.isArray(platform) ? platform[0] : platform)
           .single();
 
         if (genreError) {
