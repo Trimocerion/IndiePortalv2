@@ -6,7 +6,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
 import { useTheme } from "@mui/material/styles";
 import Head from "next/head";
-import CustomizedBreadcrumbs from "../components/breadcrumb";
+import StyledBreadcrumbs from "../components/styledBreadcrumbs";
 import { useRouter } from "next/router";
 
 
@@ -31,7 +31,7 @@ useEffect(() => {
       <CssBaseline />
       <Grid item xs={12} sm={8} md={4} component={Paper} square>
 
-              <CustomizedBreadcrumbs/>
+              <StyledBreadcrumbs/>
 
         <Box
           sx={{
