@@ -180,7 +180,7 @@ export default function GamePage() {
                 } = await supabase.storage
                   .from("avatars")
                   // @ts-ignore
-                  .download(comment.profiles.avatar_url);
+                  .download(comment.profiles?.avatar_url);
                 if (error) {
                   console.error("Error downloading image:", error.message);
                   return null;
@@ -750,11 +750,11 @@ export default function GamePage() {
                               color="text.primary"
                               onClick={() =>
                                 router.push(
-                                  `/profile/${comment.profiles.username}`,
+                                  `/profile/${comment.profiles?.username}`,
                                 )
                               }
                             >
-                              {comment.profiles.username || undefined}
+                              {comment.profiles?.username || undefined}
                             </Typography>
                             {/* Dodaj przycisk do usuwania komentarza */}
                             {user && user.id && comment.user_id === user.id && (
