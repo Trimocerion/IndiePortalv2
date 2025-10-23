@@ -598,41 +598,36 @@ export default function AdminDashboard(props: Props) {
     }
   };
 
-  const handleSaveEditedUser = async (updates: any) => {
-
-    try{
-
+  const handleSaveEditedUser = async (newRow: GridRowModel, oldRow: GridRowModel) => {
+    try {
       const updated = {
-        id: updates.id,
-        role: updates.role,
-        updated_at: new Date().toISOString()
+        id: newRow.id,
+        role: newRow.role,
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+          .from("profiles")
+          .upsert(updated)
+          .select()
+          .single();
+
+      if (error) {
+        throw error;
       }
 
-        // Zaktualizuj dane użytkownika w tabeli profiles
-      const { data, error } = await supabase.from("profiles").upsert(updated);
+      toast.success("User updated successfully!");
 
-        if (error) {
-            throw error;
-        }
+      const updatedUsers = users.map((user) => (user.id === data.id ? data : user));
+      setUsers(updatedUsers);
 
-        // Aktualizacja stanu lokalnego po zapisaniu zmian
-        const updatedUsers = users.map((user) => {
-            if (user.id === updates.id) {
-                return { ...user, ...updated }; // Aktualizacja tylko edytowanego użytkownika
-            }
-            return user;
-        });
-        setUsers(updatedUsers);
-
-        
-
-    }
-    catch (error) {
+      return data;
+    } catch (error) {
       console.error("Error updating user:", error);
+      toast.error("Error updating user!");
+      return oldRow;
     }
-
-
-  }
+  };
 
   const handleOpenAddModal = () => {
     setOpenAddModal(true);
@@ -665,7 +660,7 @@ export default function AdminDashboard(props: Props) {
       <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
         {currentTab === 0 && (
           <DataGrid
-            sx={{ borderRadius: "1rem", bgcolor: "background.paper" }}
+            sx={{ borderRadius: "1rem" }}
             getRowHeight={() => "auto"}
             pagination
             disableRowSelectionOnClick
@@ -692,7 +687,7 @@ export default function AdminDashboard(props: Props) {
 
         {currentTab === 1 && (
           <DataGrid
-            sx={{ borderRadius: "1rem", bgcolor: "background.paper" }}
+            sx={{ borderRadius: "1rem" }}
             autoHeight
             disableRowSelectionOnClick
             pagination
@@ -703,10 +698,7 @@ export default function AdminDashboard(props: Props) {
             pageSizeOptions={[5, 10, 25]}
             loading={isLoadingUsers}
             getRowId={(row) => row.id}
-            processRowUpdate={(updatedRow, originalRow) => {
-
-              handleSaveEditedUser(updatedRow).then();
-            }}
+            processRowUpdate={handleSaveEditedUser}
             slots={{ toolbar: GridToolbar }}
             slotProps={{
               toolbar: {

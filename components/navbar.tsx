@@ -166,6 +166,15 @@ export default function Navbar() {
                                         {link.text}
                                     </Button>
                                 ))}
+                                {userProfile.role === 'admin' && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => router.push('/admin-dashboard')}
+                                        sx={{ my: 1, mx: 1.5 }}
+                                    >
+                                        Admin Dashboard
+                                    </Button>
+                                )}
                             </Box>
                         )}
                     </Box>
