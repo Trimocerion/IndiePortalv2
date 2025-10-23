@@ -26,10 +26,11 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
+                if (!username) return;
                 const { data: userData, error: userError } = await supabase
                     .from('profiles')
                     .select('*')
-                    .eq('username', username)
+                    .eq('username', Array.isArray(username) ? username[0] : username)
                     .single();
 
                 if (userError) {

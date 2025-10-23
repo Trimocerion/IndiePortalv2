@@ -22,7 +22,7 @@ export default function PlatformPage() {
         const { data: genreData, error: genreError } = await supabase
           .from("age_ranges")
           .select("id")
-          .eq("age_range", age)
+          .eq("age_range", Array.isArray(age) ? age[0] : age)
           .single();
 
         if (genreError) {

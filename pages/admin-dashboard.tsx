@@ -349,7 +349,7 @@ export default function AdminDashboard(props: Props) {
         await supabase
           .from("game_genres")
           .select("genre_id")
-          .eq("game_id", editedGame.id);
+          .eq("game_id", Number(editedGame.id));
 
       if (existingGameGenresError) {
         throw existingGameGenresError;
@@ -390,7 +390,7 @@ export default function AdminDashboard(props: Props) {
           .from("game_genres")
           .delete()
           .eq("genre_id", genreId)
-          .eq("game_id", editedGame.id);
+          .eq("game_id", Number(editedGame.id));
       }
 
       // Dodaj nowe rekordy do tabeli game_genres dla nowych gatunków gier
@@ -401,7 +401,7 @@ export default function AdminDashboard(props: Props) {
           await supabase.from("game_genres").insert([
             {
               // @ts-ignore
-              game_id: editedGame.id,
+              game_id: Number(editedGame.id),
               genre_id: genre.id,
             },
           ]);
@@ -444,7 +444,7 @@ export default function AdminDashboard(props: Props) {
         const { data, error } = await supabase
           .from("games")
           .delete()
-          .eq("id", gameId);
+          .eq("id", Number(gameId));
         if (error) {
           throw error;
         }
