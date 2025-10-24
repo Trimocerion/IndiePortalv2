@@ -43,7 +43,9 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import GameAvatar from "../components/gameavatar";
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { GetServerSidePropsContext } from "next";
+import { getCookie, setCookie } from "cookies-next";
 
 interface Props {
   window?: () => Window;
@@ -999,8 +1001,26 @@ export default function AdminDashboard(props: Props) {
   );
 }
 
-export const getServerSideProps = async (ctx: any) => {
-  const supabase = createPagesServerClient(ctx);
+export const getServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return getCookie(name, { req: ctx.req, res: ctx.res });
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          setCookie(name, value, { req: ctx.req, res: ctx.res, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          setCookie(name, "", { req: ctx.req, res: ctx.res, ...options });
+        },
+      },
+    },
+  );
   const {
     data: { session },
   } = await supabase.auth.getSession();
