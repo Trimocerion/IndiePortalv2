@@ -43,6 +43,9 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import GameAvatar from "../components/gameavatar";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { GetServerSidePropsContext } from "next";
+import { getCookie, setCookie } from "cookies-next";
 
 interface Props {
   window?: () => Window;
@@ -997,3 +1000,55 @@ export default function AdminDashboard(props: Props) {
     </Box>
   );
 }
+
+export const getServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return getCookie(name, { req: ctx.req, res: ctx.res });
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          setCookie(name, value, { req: ctx.req, res: ctx.res, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          setCookie(name, "", { req: ctx.req, res: ctx.res, ...options });
+        },
+      },
+    },
+  );
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", session.user.id)
+    .single();
+  if (!profile || profile.role !== "admin") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      initialSession: session,
+      user: session.user,
+    },
+  };
+};
