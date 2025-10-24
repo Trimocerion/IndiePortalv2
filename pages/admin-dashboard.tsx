@@ -43,6 +43,7 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import GameAvatar from "../components/gameavatar";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
 interface Props {
   window?: () => Window;
@@ -997,3 +998,37 @@ export default function AdminDashboard(props: Props) {
     </Box>
   );
 }
+
+export const getServerSideProps = async (ctx: any) => {
+  const supabase = createPagesServerClient(ctx);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", session.user.id)
+    .single();
+  if (!profile || profile.role !== "admin") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      initialSession: session,
+      user: session.user,
+    },
+  };
+};
