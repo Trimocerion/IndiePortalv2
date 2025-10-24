@@ -19,7 +19,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import CustomizedBreadcrumbs from "../../components/breadcrumb";
+import StyledBreadcrumbs from "../../components/styledBreadcrumbs";
 import CommentForm from "../../components/commentForm";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -469,7 +469,7 @@ export default function GamePage() {
 
   return (
     <>
-      <CustomizedBreadcrumbs />
+      <StyledBreadcrumbs />
       <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} md={8} alignItems="center">
           <Container maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
