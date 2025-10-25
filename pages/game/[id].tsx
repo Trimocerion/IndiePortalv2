@@ -55,6 +55,10 @@ export default function GamePage() {
             console.error("Error fetching game:", error.message);
           } else {
             console.log(gameData);
+            if (gameData && gameData.platforms && !Array.isArray(gameData.platforms)) {
+              // @ts-ignore
+              gameData.platforms = [gameData.platforms];
+            }
             setGame(gameData as Game);
 
             // Pobierz obraz gry
@@ -595,15 +599,19 @@ export default function GamePage() {
                   component="div"
                   textAlign="center"
                 >
-                  {game?.platforms.name > 0 && <br />}
-                  <Button
-                    variant="text"
-                    onClick={() =>
-                      router.push(`/platform/${game?.platforms.name}`)
-                    }
-                  >
-                    {game?.platforms.name || "No platforms"}
-                  </Button>
+                  {game?.platforms?.map((platform: any, index: number) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <br />}
+                      <Button
+                        variant="text"
+                        onClick={() =>
+                          router.push(`/platform/${platform.name}`)
+                        }
+                      >
+                        {platform.name}
+                      </Button>
+                    </React.Fragment>
+                  )) || "No platforms"}
                 </Typography>
               </Box>
             </Paper>
@@ -629,10 +637,10 @@ export default function GamePage() {
                   <Button
                     variant="text"
                     onClick={() =>
-                      router.push(`/age/${game?.age_ranges.age_range}`)
+                      router.push(`/age/${game?.age_ranges?.age_range}`)
                     }
                   >
-                    {game?.age_ranges.age_range || "No age range"}
+                    {game?.age_ranges?.age_range || "No age range"}
                   </Button>
                 </Typography>
               </Box>
@@ -687,9 +695,9 @@ export default function GamePage() {
                     onClick={() => router.push(`/game/${game.id}`)}
                   >
                     <RelatedGamecard
-                      title={game.title}
+                      title={game.title || ''}
                       id={game.id}
-                      avatar_url={game.cover_image_url}
+                      avatar_url={game.cover_image_url || ''}
                     />
                   </Box>
                 ))}

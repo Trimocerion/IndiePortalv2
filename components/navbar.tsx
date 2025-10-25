@@ -86,12 +86,12 @@ export default function Navbar() {
     const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
     const openMenu = Boolean(menuAnchorEl);
 
-    // Funkcja otwierająca menu
+    // open menu function
     const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setMenuAnchorEl(event.currentTarget);
     };
 
-// Funkcja zamykająca menu
+// close menu function
     const handleMenuClose = () => {
         setMenuAnchorEl(null);
     };
@@ -239,7 +239,7 @@ export default function Navbar() {
                                      aria-haspopup="true"
                                      aria-expanded={open ? 'true' : undefined}
                                  >
-                                     <Avatar src={avatarUrl || userProfile.avatar_url} sx={{ width: 32, height: 32 }} />
+                                     <Avatar src={avatarUrl || userProfile.avatar_url || ''} sx={{ width: 32, height: 32 }} />
                                  </IconButton>
                              </Tooltip>
                          )}
@@ -282,7 +282,7 @@ export default function Navbar() {
                         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                             <ListItem>
                                 <ListItemAvatar>
-                                    <Avatar src={avatarUrl || userProfile.avatar_url} />
+                                    <Avatar src={avatarUrl || userProfile.avatar_url || ''} />
                                 </ListItemAvatar>
                                 <ListItemText primary={userProfile.username} />
                             </ListItem>

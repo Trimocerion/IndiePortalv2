@@ -735,7 +735,7 @@ export default function AdminDashboard(props: Props) {
 
           <Stack   divider={<Divider orientation="vertical" flexItem />}
           >
-                       <GameAvatar url={selectedItem?.cover_image_url}
+                       <GameAvatar url={selectedItem?.cover_image_url || ''}
             onUpload={
                 (event: React.SyntheticEvent, url: string) => {
                     setEditedGame((prevState) => ({
@@ -744,7 +744,7 @@ export default function AdminDashboard(props: Props) {
                     }));
                 }
             }
-            gameName={selectedItem?.title}/>
+            gameName={selectedItem?.title || ''}/>
           <TextField
             id="title"
             name="title"
@@ -780,7 +780,7 @@ export default function AdminDashboard(props: Props) {
 
 
             <CustomizedHook
-                genres={selectedItem?.genres}
+                genres={selectedItem?.genres || []}
                 onSelectedGenresChange={(selectedGenres) =>
                     setSelectedCategory(selectedGenres)
                 }
@@ -790,7 +790,7 @@ export default function AdminDashboard(props: Props) {
           <Select
               labelId="age-range"
               name="age_range"
-              value={selectedItem?.age_range}
+              value={selectedItem?.age_ranges}
               label="Age Range"
               // @ts-ignore
               onChange={handleChangeEditedGame}
@@ -815,7 +815,7 @@ export default function AdminDashboard(props: Props) {
           <Select
               labelId="age-range"
               name="platform_ids"
-              value={selectedItem?.platform_ids}
+              value={selectedItem?.platforms}
               label="Platform"
               // @ts-ignore
               onChange={handleChangeEditedGame}

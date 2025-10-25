@@ -5,7 +5,6 @@ import {
   Button,
   Box,
   Container,
-  Divider,
   FormControl,
   Grid,
   InputLabel,
@@ -23,8 +22,7 @@ import { Game } from "../redux/types";
 const GameFinder: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [selectedAgeRange, setSelectedAgeRange] = useState("");
-  const [foundGames, setFoundGames] = useState([]);
-  const [similarGames, setSimilarGames] = useState<Game[]>([]);
+  const [foundGames, setFoundGames] = useState<Game[]>([]);
   const [isSearchClicked, setIsSearchClicked] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -33,8 +31,6 @@ const GameFinder: React.FC = () => {
   const handleSearch = async () => {
     setLoading(true);
     try {
-      console.log("Selected category:", selectedCategory);
-
       //get ids of games that have the selected category
       const { data: gameGenresData, error: gamesGenresError } = await supabase
         .from("genres")
@@ -46,38 +42,20 @@ const GameFinder: React.FC = () => {
         return;
       }
 
-      console.log("Game genres data:", gameGenresData);
-
       //get ids of games with selected genres
       const selectedCategoryIds = gameGenresData.map((genre: any) => genre.id);
 
-      console.log("Selected category ids:", selectedCategoryIds);
-
-      const { data: gamesAgeData, error: gamesAgeError } = await supabase
-        .from("age_ranges")
-        .select("*")
-        .eq("age_range", selectedAgeRange);
-
-      if (gamesAgeError) {
-        console.error("Error fetching game age ranges:", gamesAgeError.message);
-      }
-      console.log("Game age data:", gamesAgeData);
-
-      // Znajdź gry, które są dokładnie zgodne z wybranymi kategoriami i przedziałem wiekowym
+      // Find games that match the selected categories and age range
       const { data: gamesData, error: gamesError } = await supabase
         .from("games")
-        .select(
-          "*, game_genres(*), genres(*), favorites(*), platforms(*), age_ranges(*)",
-        );
+        .select("*, game_genres(*), genres(*), favorites(*), age_ranges(*)");
 
       if (gamesError) {
         console.error("Error fetching exact match games:", gamesError.message);
         return;
       }
 
-      console.log("Wszystkie gry:", gamesData);
-
-      // Filtrowanie gier
+      // Filter games
       const filteredGamesData = gamesData.filter(
         (game: any) =>
           game.game_genres.length > 0 &&
@@ -87,19 +65,14 @@ const GameFinder: React.FC = () => {
           game.age_ranges.age_range === selectedAgeRange,
       );
 
-      console.log("Filtered games:", filteredGamesData);
-
       if (filteredGamesData.length === 0) {
-        console.log("No exact match games found.");
-        // @ts-ignore
-        setSimilarGames(filteredGamesData);
         setFoundGames([]);
+        setIsSearchClicked(true);
         return;
       }
 
       setIsSearchClicked(true);
 
-      // @ts-ignore
       setFoundGames(filteredGamesData || []);
     } catch (error: any) {
       console.error("Error searching for games:", error.message);
@@ -148,21 +121,32 @@ const GameFinder: React.FC = () => {
               setSelectedCategory(selectedGenres)
             }
           />
-          <Button variant="contained" onClick={handleSearch} size="large" disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Search'}
+          <Button
+            variant="contained"
+            onClick={handleSearch}
+            size="large"
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : "Search"}
           </Button>
         </Stack>
       </Box>
-      {foundGames.length === 0 &&
-      similarGames.length === 0 &&
-      isSearchClicked &&
-      !loading ? (
-        <Box sx={{ mt: 4, p: 3, textAlign: 'center', backgroundColor: 'grey.100', borderRadius: 2 }}>
+      {foundGames.length === 0 && isSearchClicked && !loading ? (
+        <Box
+          sx={{
+            mt: 4,
+            p: 3,
+            textAlign: "center",
+            backgroundColor: "grey.100",
+            borderRadius: 2,
+          }}
+        >
           <Typography variant="h6" color="text.primary">
             No Games Found
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            We couldn&apos;t find any games matching your criteria. Try adjusting your filters.
+            We couldn&apos;t find any games matching your criteria. Try
+            adjusting your filters.
           </Typography>
         </Box>
       ) : null}
@@ -177,20 +161,9 @@ const GameFinder: React.FC = () => {
         {foundGames.map((game: Game) => (
           <Grid item key={game.id} xs={12} md={4}>
             <GameCard
-              title={game.title}
-              desc={game.description}
-              avatar_url={game.cover_image_url}
-              id={game.id}
-            />
-          </Grid>
-        ))}
-
-        {similarGames.map((game: Game) => (
-          <Grid item key={game.id} xs={12} md={4}>
-            <GameCard
-              title={game.title}
-              desc={game.description}
-              avatar_url={game.cover_image_url}
+              title={game.title || ''}
+              desc={game.description || ''}
+              avatar_url={game.cover_image_url || ''}
               id={game.id}
             />
           </Grid>
