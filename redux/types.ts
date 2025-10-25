@@ -39,7 +39,7 @@ export interface Genre {
 
 export interface Platform {
   id: number;
-  platform_name: string;
+  name: string;
 }
 
 export interface AgeRange {

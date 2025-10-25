@@ -55,6 +55,10 @@ export default function GamePage() {
             console.error("Error fetching game:", error.message);
           } else {
             console.log(gameData);
+            if (gameData && gameData.platforms && !Array.isArray(gameData.platforms)) {
+              // @ts-ignore
+              gameData.platforms = [gameData.platforms];
+            }
             setGame(gameData as Game);
 
             // Pobierz obraz gry
