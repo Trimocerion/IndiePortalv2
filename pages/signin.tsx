@@ -1,6 +1,6 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, CssBaseline, Grid, Paper } from "@mui/material";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { Auth } from "@supabase/auth-ui-react";
@@ -11,16 +11,21 @@ import { useRouter } from "next/router";
 
 
 export default function SignIn() {
-const supabase = useSupabaseClient()
-const theme = useTheme()
-const router = useRouter();
-const user = useUser()
+  const supabase = useSupabaseClient()
+  const theme = useTheme()
+  const router = useRouter();
+  const user = useUser()
+  const [redirectUrl, setRedirectUrl] = useState('');
 
-useEffect(() => {
-        if (user) {
-            router.push('/')
-        }
-    })
+  useEffect(() => {
+    setRedirectUrl(window.location.origin);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+        router.push('/')
+    }
+  })
 
 
   return (
@@ -45,14 +50,16 @@ useEffect(() => {
         </Box>
 
         <Box sx={{ mx: 6 }}>
-          <Auth
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            magicLink
-            providers={['discord', 'google']}
-            theme={theme.palette.mode}
-            redirectTo="http://localhost:3000"
-          />
+          {redirectUrl && (
+            <Auth
+              supabaseClient={supabase}
+              appearance={{ theme: ThemeSupa }}
+              magicLink
+              providers={['discord', 'google']}
+              theme={theme.palette.mode}
+              redirectTo={redirectUrl}
+            />
+          )}
         </Box>
       </Grid>
       <Grid
