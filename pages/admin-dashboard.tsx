@@ -739,7 +739,7 @@ export default function AdminDashboard(props: Props) {
           <Select
               labelId="age-range"
               name="age_range"
-              value={selectedItem?.age_ranges}
+              value={editedGame.age_range}
               label="Age Range"
               // @ts-ignore
               onChange={handleChangeEditedGame}
@@ -764,7 +764,7 @@ export default function AdminDashboard(props: Props) {
           <Select
               labelId="age-range"
               name="platform_ids"
-              value={selectedItem?.platforms}
+              value={editedGame.platform_ids}
               label="Platform"
               // @ts-ignore
               onChange={handleChangeEditedGame}
