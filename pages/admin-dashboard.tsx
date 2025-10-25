@@ -113,65 +113,56 @@ export default function AdminDashboard(props: Props) {
   };
 
 
-// Funkcja do zamykania modala
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
-  useEffect(() => {
-    // Fetch games
-    const fetchGames = async () => {
-      try {
-        setIsLoadingGames(true);
-        const { data, error } = await supabase
-          .from("games")
-          .select("*, genres(*), ratings(*), platforms(*), age_ranges(*)");
-        if (error) {
-          throw error;
-        }
+  const fetchGames = async () => {
+    try {
+      setIsLoadingGames(true);
+      const { data, error } = await supabase
+        .from("games")
+        .select("*, genres(*), ratings(*), platforms(*), age_ranges(*)");
+      if (error) {
+        throw error;
+      }
 
-
-        //sum ratings
-        data.map((game: any) => {
-          let sum = 0;
-          game.ratings.map((rating: any) => {
-            sum += rating.rating;
-          });
-          game.rating = sum / game.ratings.length || 0;
-          game.rating = game.rating.toFixed(0);
+      //sum ratings
+      data.map((game: any) => {
+        let sum = 0;
+        game.ratings.map((rating: any) => {
+          sum += rating.rating;
         });
+        game.rating = sum / game.ratings.length || 0;
+        game.rating = game.rating.toFixed(0);
+      });
 
-        setGames(data || []);
-      } catch (error) {
-        toast.error("Error loading games!");
-        console.error(error);
-      } finally {
-        setIsLoadingGames(false);
+      setGames(data || []);
+    } catch (error) {
+      toast.error("Error loading games!");
+      console.error(error);
+    } finally {
+      setIsLoadingGames(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      setIsLoadingUsers(true);
+      const { data, error } = await supabase.from("profiles").select("*");
+
+      if (error) {
+        throw error;
       }
-    };
-
-    // Fetch users
-    const fetchUsers = async () => {
-      try {
-        setIsLoadingUsers(true);
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("*")
-
-        if (error) {
-          throw error;
-        }
-        console.log(data);
-
-        setUsers(data || []);
-      } catch (error) {
-        toast.error("Error loading users!");
-        console.error(error);
-      } finally {
-        setIsLoadingUsers(false);
-      }
-    };
-
+      setUsers(data || []);
+    } catch (error) {
+      toast.error("Error loading users!");
+      console.error(error);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+  useEffect(() => {
     fetchGames();
     fetchUsers();
   }, []);
@@ -272,10 +263,7 @@ export default function AdminDashboard(props: Props) {
   );
 
   const handleEditMovie = async (item: any) => {
-    //handle edit game
-
     setSelectedItem(item);
-    console.log("Selected item:", item);
     setOpenModal(true);
 
     setEditedGame({
@@ -294,11 +282,6 @@ export default function AdminDashboard(props: Props) {
   ) => {
     const { name, value } = event.target;
 
-
-    console.log("Name:", name);
-    console.log("Value:", value);
-
-
     setEditedGame((prevState) => ({
       ...prevState,
       [name]: value,
@@ -307,13 +290,11 @@ export default function AdminDashboard(props: Props) {
 
   const handleSaveEditedGame = async () => {
     try {
-      // Sprawdź, czy id, title i description nie są puste
       if (!editedGame.id || !editedGame.title || !editedGame.description) {
-        console.error("ID, title, or description is missing.");
+        toast.error("ID, title, or description is missing.");
         return;
       }
 
-      // Zaktualizuj dane gry w tabeli games
       const updates: {
         id?: any;
         title?: string;
@@ -330,14 +311,11 @@ export default function AdminDashboard(props: Props) {
         platform_ids: editedGame.platform_ids,
       };
 
-      console.log("Updates:", updates);
-
       let { data, error } = await supabase.from("games").upsert(updates);
       if (error) {
         throw error;
       }
 
-      // Pobierz gatunki gry z tabeli genres
       let { data: genresData, error: genresError } = await supabase
         .from("genres")
         .select("id, genre_name")
@@ -347,7 +325,6 @@ export default function AdminDashboard(props: Props) {
         throw genresError;
       }
 
-      // Pobierz istniejące gatunki gry z tabeli game_genres
       let { data: existingGameGenresData, error: existingGameGenresError } =
         await supabase
           .from("game_genres")
@@ -362,19 +339,13 @@ export default function AdminDashboard(props: Props) {
         (row: any) => row.genre_id,
       );
 
-      console.log("Existing genre IDs:", existingGenreIds);
-
       let selectedCategoryIds: any;
 
       if (genresData?.length === 0) {
-        console.log("Genres data:", genresData);
         selectedCategoryIds = existingGenreIds;
       } else {
         selectedCategoryIds = genresData?.map((genre: any) => genre.id);
       }
-
-      console.log("Selected category IDs:", selectedCategoryIds);
-      console.log("Game genres:", editedGame.genres);
 
       // Usuń gatunki, które nie są już wybrane przez użytkownika
       const genresToDelete = existingGenreIds?.filter(
@@ -383,9 +354,6 @@ export default function AdminDashboard(props: Props) {
       const genresToAdd = selectedCategoryIds?.filter(
         (genreId: any) => !existingGenreIds?.includes(genreId),
       );
-
-      console.log("Genres to delete:", genresToDelete);
-      console.log("Genres to add:", genresToAdd);
 
       // @ts-ignore
       for (const genreId of genresToDelete) {
@@ -396,7 +364,6 @@ export default function AdminDashboard(props: Props) {
           .eq("game_id", Number(editedGame.id));
       }
 
-      // Dodaj nowe rekordy do tabeli game_genres dla nowych gatunków gier
       // @ts-ignore
       for (const genre of genresData) {
         // @ts-ignore
@@ -411,28 +378,13 @@ export default function AdminDashboard(props: Props) {
         }
       }
 
-      //aktualiazacja stanu lokanlego genres w tabeli games
-
-      // Aktualizacja stanu lokalnego po zapisaniu zmian
-      const updatedGames = games.map((game) => {
-        if (game.id === editedGame.id) {
-          return { ...game, ...editedGame ,
-
-            genres: genresData,
-
-          }; // Aktualizacja tylko edytowanej gry
-        }
-        return game;
-      });
-
-      console.log("Updated games:", updatedGames);
-
-      setGames(updatedGames);
       setSelectedCategory([]);
       handleCloseModal();
-      console.log("Game updated successfully:", data);
+      toast.success("Game updated successfully!");
+      fetchGames();
     } catch (error) {
       console.error("Error updating game:", error);
+      toast.error("Error updating game!");
     }
   };
 
@@ -620,11 +572,8 @@ export default function AdminDashboard(props: Props) {
       }
 
       toast.success("User updated successfully!");
-
-      const updatedUsers = users.map((user) => (user.id === data.id ? data : user));
-      setUsers(updatedUsers);
-
-      return data;
+      fetchUsers();
+      return data as GridRowModel;
     } catch (error) {
       console.error("Error updating user:", error);
       toast.error("Error updating user!");
