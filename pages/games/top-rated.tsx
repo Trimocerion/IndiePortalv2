@@ -11,6 +11,10 @@ import { supabase } from "../../utility/supabaseClient";
 import GameCard from "../../components/gamecard";
 import { Game } from "../../redux/types";
 
+/**
+ * A page component that displays the top-rated games in a paginated list.
+ * @returns {React.ReactElement} The rendered top-rated games page.
+ */
 export default function TopRated() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);

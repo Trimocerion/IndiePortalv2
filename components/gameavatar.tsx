@@ -9,6 +9,14 @@ interface GameAvatarProps {
   gameName?: string; // Dodaj nową właściwość do przekazywania nazwy gry
 }
 
+/**
+ * Renders a game avatar with an upload button.
+ * @param {object} props - The props for the component.
+ * @param {string} props.url - The URL of the game's avatar.
+ * @param {function} props.onUpload - The function to call when a new avatar is uploaded.
+ * @param {string} [props.gameName] - The name of the game.
+ * @returns {React.ReactElement} The rendered game avatar component.
+ */
 const GameAvatar: React.FC<GameAvatarProps> = ({ url, onUpload, gameName }) => {
     const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
     const [uploading, setUploading] = useState<boolean>(false);

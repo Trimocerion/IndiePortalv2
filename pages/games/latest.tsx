@@ -12,6 +12,10 @@ import { supabase } from "../../utility/supabaseClient";
 import { Game } from "../../redux/types";
 import GameCard from "../../components/gamecard";
 
+/**
+ * A page component that displays the latest games in a paginated list.
+ * @returns {React.ReactElement} The rendered latest games page.
+ */
 const LatestPage: React.FC = () => {
     const [latestGames, setLatestGames] = useState<Game[]>([]);
     const [loading, setLoading] = useState(true);

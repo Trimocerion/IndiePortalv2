@@ -46,6 +46,19 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
+/**
+ * A card component that displays information about a game.
+ * @param {object} props - The props for the component.
+ * @param {any[]} [props.genres] - The genres of the game.
+ * @param {string} [props.title] - The title of the game.
+ * @param {string} [props.avatar_url] - The URL of the game's avatar.
+ * @param {number} props.id - The ID of the game.
+ * @param {any[]} [props.favorites] - The list of favorites for the game.
+ * @param {any} [props.created_at] - The creation date of the game.
+ * @param {string} [props.desc] - The description of the game.
+ * @param {any[]} [props.ratings] - The ratings for the game.
+ * @returns {React.ReactElement} The rendered game card component.
+ */
 const GameCard: React.FC<GameCardProps> = ({ genres, title, avatar_url, id,favorites, created_at, desc, ratings }) => {
 
     const router = useRouter();

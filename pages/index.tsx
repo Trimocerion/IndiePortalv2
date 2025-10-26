@@ -10,6 +10,11 @@ import {
 import { supabase } from "../utility/supabaseClient";
 import GameCard from "../components/gamecard";
 
+/**
+ * The main index page of the application.
+ * It displays a paginated list of games.
+ * @returns {React.ReactElement} The rendered index page.
+ */
 export default function Index() {
   const [games, setGames] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

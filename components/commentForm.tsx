@@ -9,6 +9,13 @@ interface CommentFormProps {
     onCommentAdded: (newComment: Comment) => void;
 }
 
+/**
+ * A form for users to submit comments on a game.
+ * @param {object} props - The props for the component.
+ * @param {string} props.gameId - The ID of the game being commented on.
+ * @param {(newComment: Comment) => void} props.onCommentAdded - Callback function to be called when a new comment is added.
+ * @returns {React.ReactElement} The rendered comment form.
+ */
 const CommentForm: React.FC<CommentFormProps> = ({ gameId, onCommentAdded }) => {
     const [comment, setComment] = useState<string>('');
 

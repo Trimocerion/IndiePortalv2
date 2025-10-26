@@ -9,6 +9,14 @@ interface Profile {
   username: string,
 }
 
+/**
+ * Renders a user profile card with an avatar that can be updated.
+ * @param {object} props - The props for the component.
+ * @param {string} props.url - The URL of the user's avatar.
+ * @param {function} props.onUpload - Callback function triggered on avatar upload.
+ * @param {string} props.username - The username of the user.
+ * @returns {React.ReactElement} The rendered profile card component.
+ */
 export default function ProfileCard({ url, onUpload, username, }: Profile) {
   const user = useUser()
   const session = useSession()

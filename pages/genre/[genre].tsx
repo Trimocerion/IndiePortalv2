@@ -8,6 +8,11 @@ import GameCard from "../../components/gamecard";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // Załóżmy, że masz plik supabaseClient z konfiguracją Supabase
 
+/**
+ * A page that displays games filtered by a specific genre.
+ * The genre is determined by the `genre` query parameter in the URL.
+ * @returns {React.ReactElement} The rendered genre page.
+ */
 export default function GenrePage() {
   const router = useRouter();
   const { genre } = router.query;

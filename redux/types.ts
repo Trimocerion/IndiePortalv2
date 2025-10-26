@@ -1,3 +1,6 @@
+/**
+ * Represents the state of a user profile.
+ */
 export interface UserProfileState {
   id?: string;
   username?: string | null;
@@ -9,6 +12,9 @@ export interface UserProfileState {
   birthday?: string | null;
 }
 
+/**
+ * Represents a game object.
+ */
 export interface Game {
   id: number;
   title?: string | null;
@@ -23,6 +29,9 @@ export interface Game {
   created_at?: string;
 }
 
+/**
+ * Represents a comment object.
+ */
 export interface Comment {
   id?: number;
   content?: string | null;
@@ -32,26 +41,41 @@ export interface Comment {
   profiles?: UserProfileState | null;
 }
 
+/**
+ * Represents a genre object.
+ */
 export interface Genre {
   id: number;
   genre_name: string;
 }
 
+/**
+ * Represents a platform object.
+ */
 export interface Platform {
   id: number;
   name: string;
 }
 
+/**
+ * Represents an age range object.
+ */
 export interface AgeRange {
   id: number;
   age_range: string;
 }
 
+/**
+ * Represents a favorite object.
+ */
 export interface Favorite {
   game_id: number;
   profile_id: string;
 }
 
+/**
+ * Represents a rating object.
+ */
 export interface Rating {
   id: number;
   user_id: string;
@@ -59,6 +83,9 @@ export interface Rating {
   rating: number;
 }
 
+/**
+ * Represents the root state of the Redux store.
+ */
 export interface RootState {
   userProfile: UserProfileState;
 }

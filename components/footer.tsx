@@ -6,6 +6,10 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 
 import CssBaseline from "@mui/material/CssBaseline";
 
+/**
+ * A sticky footer component that displays site information and social media links.
+ * @returns {React.ReactElement} The rendered footer component.
+ */
 const StickyFooter = () => {
     return (
         <Box

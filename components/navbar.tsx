@@ -39,6 +39,11 @@ interface ThemeState {
     darkMode: boolean;
 }
 
+/**
+ * The main navigation bar for the application.
+ * It includes navigation links, a search input, and user account controls.
+ * @returns {React.ReactElement} The rendered navbar component.
+ */
 export default function Navbar() {
     const session = useSession();
     const router = useRouter();

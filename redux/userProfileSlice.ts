@@ -12,6 +12,9 @@ const initialState: UserProfileState = {
   created_at:''
 };
 
+/**
+ * Redux slice for managing the user profile state.
+ */
 const userProfileSlice = createSlice({
   name: 'userProfile',
   initialState,

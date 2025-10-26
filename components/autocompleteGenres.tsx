@@ -64,6 +64,11 @@ interface TagProps extends ReturnType<AutocompleteGetTagProps> {
     label: string;
 }
 
+/**
+ * Renders a tag component with a label and a delete icon.
+ * @param {TagProps} props - The props for the Tag component.
+ * @returns {React.ReactElement} The rendered tag.
+ */
 function Tag(props: TagProps) {
     const { label, onDelete, ...other } = props;
     return (
@@ -157,7 +162,13 @@ const Listbox = styled('ul')(
 `,
 );
 
-
+/**
+ * A customized autocomplete component for selecting genres.
+ * @param {object} props - The props for the component.
+ * @param {any[]} [props.genres] - The initial list of genres.
+ * @param {(selectedGenres: string[]) => void} props.onSelectedGenresChange - Callback function for when selected genres change.
+ * @returns {React.ReactElement} The rendered autocomplete component.
+ */
 export default function CustomizedHook({ genres, onSelectedGenresChange  }: { genres?: any[], onSelectedGenresChange: (selectedGenres: string[]) => void }) {
     const [options, setOptions] = useState<string[]>([]);
     const [selectedGameGenres, setSelectedGameGenres] = useState<string[]>([]);

@@ -8,6 +8,11 @@ import GameCard from "../../components/gamecard";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // Załóżmy, że masz plik supabaseClient z konfiguracją Supabase
 
+/**
+ * A page that displays games filtered by a specific platform.
+ * The platform is determined by the `platform` query parameter in the URL.
+ * @returns {React.ReactElement} The rendered platform page.
+ */
 export default function PlatformPage() {
   const router = useRouter();
   const { platform } = router.query;

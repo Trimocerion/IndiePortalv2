@@ -22,6 +22,12 @@ interface MyAppProps extends AppProps {
   initialSession: Session;
 }
 
+/**
+ * The main application component.
+ * It wraps the entire application with necessary providers and layout.
+ * @param {MyAppProps} props - The props for the component.
+ * @returns {React.ReactElement} The rendered application.
+ */
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, pageProps, initialSession, } = props;
   const router = useRouter();

@@ -13,6 +13,11 @@ interface game {
     cover_image_url: string;
 }
 
+/**
+ * A search input component that allows users to search for games.
+ * It displays a list of search results as the user types.
+ * @returns {React.ReactElement} The rendered search input component.
+ */
 const SearchInput = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
