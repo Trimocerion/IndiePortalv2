@@ -1,15 +1,14 @@
 import React, { ReactElement, ReactNode, useEffect, useState } from "react";
 import { useSession, useUser } from "@supabase/auth-helpers-react";
 import {
-  Box,
-  Button,
-  DialogActions,
-  Grid,
-  Paper,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
+    Box,
+    Button,
+    DialogActions,
+    Grid,
+    Tab,
+    Tabs,
+    TextField,
+    Typography,
 } from "@mui/material";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -254,77 +253,66 @@ export default function SettingsDialog(props: SimpleDialogProps) {
 
 
                     <TabPanel value={value} index={0}>
-                        <Paper sx={{
-                            width: '100%',
-                            maxWidth: 600,
-                            py: 2,
-                            px: 1,
-                            bgcolor: 'background.default',
-                            borderRadius: "1rem"
-                        }} elevation={0}>
-                                <Grid container rowSpacing={1} columnSpacing={{xs: 2, sm: 3, md: 2}}>
-                                    <Grid item xs={12} md={12} justifyContent="center">
-                                        <Profile
-                                            onUpload={(event: React.SyntheticEvent, url: string) => {
-                                                setAvatarUrl(url)
-                                                updateProfile({username, avatar_url: url, description, birthday})
-                                            }}
-                                            url={avatar_url}
-                                            username={username}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            fullWidth
-                                            size="small"
-                                            label="username"
-                                            type="text"
-                                            value={username || user?.user_metadata.name}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            disabled
-                                            size="small"
-                                            label="Level"
-                                            type="number"
-                                            value={level}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField fullWidth size="small" label="email" type="text" value={email}
-                                                   disabled/>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField fullWidth size="small" label="role" type="text" value={role}
-                                                   disabled/>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            fullWidth
-                                            size="small"
-                                            label="description"
-                                            type="text"
-                                            value={description || user?.user_metadata.description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <DatePicker
-                                            label="Date of birth"
-                                            value={dayjs(birthday)}
-                                            onChange={handleDateChange}
-                                            disableFuture
-                                            timezone="Europe/Paris"
-                                            maxDate={dayjs(maxDate)}
-                                            minDate={dayjs('1960-01-01')}
-                                        />
-                                    </Grid>
+                        <Box sx={{ p: 2 }}>
+                            <Grid container spacing={2} justifyContent="center">
+                                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Profile
+                                        onUpload={(event: React.SyntheticEvent, url: string) => {
+                                            setAvatarUrl(url);
+                                            updateProfile({ username, avatar_url: url, description, birthday });
+                                        }}
+                                        url={avatar_url}
+                                        username={username}
+                                    />
                                 </Grid>
-                        </Paper>
-                        <DialogActions>
-                            <Button onClick={handleClose} variant="outlined" size="small"
-                                    fullWidth>Cancel</Button>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Username"
+                                        type="text"
+                                        value={username || user?.user_metadata.name}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        disabled
+                                        label="Level"
+                                        type="number"
+                                        value={level}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField fullWidth label="Email" type="text" value={email} disabled />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField fullWidth label="Role" type="text" value={role} disabled />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <DatePicker
+                                        label="Date of birth"
+                                        value={dayjs(birthday)}
+                                        onChange={handleDateChange}
+                                        disableFuture
+                                        maxDate={dayjs(maxDate)}
+                                        minDate={dayjs('1960-01-01')}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Description"
+                                        multiline
+                                        rows={4}
+                                        value={description || user?.user_metadata.description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Box>
+                        <DialogActions sx={{ p: 2 }}>
+                            <Button onClick={handleClose} variant="outlined" fullWidth>Cancel</Button>
                             <Button autoFocus
                                     onClick={() => updateProfile({username, avatar_url, description, birthday})}
                                     disabled={loading}
