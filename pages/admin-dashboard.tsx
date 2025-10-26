@@ -51,6 +51,11 @@ interface Props {
   window?: () => Window;
 }
 
+/**
+ * The admin dashboard page, allowing administrators to manage games and users.
+ * @param {Props} props - The props for the component.
+ * @returns {React.ReactElement} The rendered admin dashboard page.
+ */
 export default function AdminDashboard(props: Props) {
   const [games, setGames] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);

@@ -13,6 +13,13 @@ interface RelatedGameCardProps {
   id?: number;
 }
 
+/**
+ * A card component for displaying a related game.
+ * @param {object} props - The props for the component.
+ * @param {string} [props.title] - The title of the game.
+ * @param {string} [props.avatar_url] - The URL of the game's avatar.
+ * @returns {React.ReactElement} The rendered related game card component.
+ */
 const RelatedGamecard: FunctionComponent<RelatedGameCardProps> = ({ title, avatar_url }) => {
     const [gameImage, setGameImage] = React.useState<string | undefined>(undefined);
 

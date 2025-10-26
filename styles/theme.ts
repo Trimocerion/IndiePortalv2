@@ -8,6 +8,11 @@ export const roboto = Fira_Sans({
   fallback: ['Helvetica', 'Arial', 'sans-serif'],
 });
 
+/**
+ * Returns the design tokens for the Material-UI theme.
+ * @param {PaletteMode} mode - The color palette mode ('light' or 'dark').
+ * @returns {object} The theme options.
+ */
 export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
     mode,

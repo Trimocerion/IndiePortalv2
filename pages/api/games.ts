@@ -13,6 +13,12 @@ type Game = {
     publisher: string;
 };
 
+/**
+ * An API route to fetch all games from the database.
+ * @param {NextApiRequest} req - The request object.
+ * @param {NextApiResponse} res - The response object.
+ * @returns {Promise<void>}
+ */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         // Fetch games

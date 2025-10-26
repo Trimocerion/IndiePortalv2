@@ -17,7 +17,13 @@ interface RootState {
     };
 }
 
-
+/**
+ * The main layout component for the application.
+ * It provides the theme and renders the navbar and children.
+ * @param {object} props - The props for the component.
+ * @param {React.ReactNode} props.children - The children to render within the layout.
+ * @returns {React.ReactElement} The rendered layout component.
+ */
 export default function Layout({ children }: Props) {
   const [mode, setMode] = useState<PaletteMode>("light");
   const router = useRouter();

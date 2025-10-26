@@ -18,6 +18,10 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => ({
   },
 })) as typeof Chip;
 
+/**
+ * A component that displays styled breadcrumbs based on the current URL path.
+ * @returns {React.ReactElement} The rendered styled breadcrumbs component.
+ */
 export default function StyledBreadcrumbs() {
   const router = useRouter();
   const { asPath } = router;

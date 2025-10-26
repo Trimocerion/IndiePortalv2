@@ -23,6 +23,10 @@ const data = [
     },
 ];
 
+/**
+ * A component that displays a list of items with images, titles, and descriptions.
+ * @returns {React.ReactElement} The rendered list stack component.
+ */
 export default function ListStackRatio() {
     return (
         <Card variant="outlined" sx={{ width: 300, p: 0 }}>

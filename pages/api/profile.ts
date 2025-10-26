@@ -10,6 +10,12 @@ type Profile = {
   role:string
 };
 
+/**
+ * An API route to fetch the profile of the authenticated user.
+ * @param {NextApiRequest} req - The request object.
+ * @param {NextApiResponse} res - The response object.
+ * @returns {Promise<void>}
+ */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const user  = useUser();
   try {

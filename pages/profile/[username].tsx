@@ -24,6 +24,11 @@ import { supabase } from "../../utility/supabaseClient";
 import Carousel from "react-material-ui-carousel";
 import RelatedGamecard from "../../components/relatedGamecard";
 
+/**
+ * A page component that displays the profile of a user.
+ * The user is determined by the `username` query parameter in the URL.
+ * @returns {React.ReactElement} The rendered user profile page.
+ */
 const UserProfile = () => {
     const router = useRouter();
     const { username } = router.query;

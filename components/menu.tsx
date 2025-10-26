@@ -5,6 +5,10 @@ import Fade from '@mui/material/Fade';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+/**
+ * A reusable menu component with a fade transition.
+ * @returns {React.ReactElement} The rendered fade menu component.
+ */
 export default function FadeMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

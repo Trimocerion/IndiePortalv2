@@ -3,6 +3,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { getCookie, setCookie } from "cookies-next";
 
+/**
+ * An API route to fetch the authenticated user from Supabase.
+ * @param {NextApiRequest} req - The request object.
+ * @param {NextApiResponse} res - The response object.
+ * @returns {Promise<void>}
+ */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const supabaseServerClient = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

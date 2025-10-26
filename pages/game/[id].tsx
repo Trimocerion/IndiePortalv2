@@ -27,6 +27,12 @@ import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RelatedGamecard from "../../components/relatedGamecard";
 
+/**
+ * A page component that displays detailed information about a specific game.
+ * It fetches game data, ratings, comments, and related games based on the `id`
+ * from the URL query parameters.
+ * @returns {React.ReactElement} The rendered game page.
+ */
 export default function GamePage() {
   const router = useRouter();
   const user = useUser();

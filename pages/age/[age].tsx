@@ -8,6 +8,11 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Game } from "../../redux/types";
 
+/**
+ * A page that displays games filtered by a specific age range.
+ * The age range is determined by the `age` query parameter in the URL.
+ * @returns {React.ReactElement} The rendered age page.
+ */
 export default function AgePage() {
   const router = useRouter();
   const { age } = router.query;

@@ -36,7 +36,12 @@ interface TabPanelProps {
   value: number;
 }
 
-
+/**
+ * Transition component for the slide-up animation of the dialog.
+ * @param {TransitionProps & { children: ReactElement }} props - The props for the component.
+ * @param {React.Ref<unknown>} ref - The ref for the component.
+ * @returns {ReactElement} The slide transition component.
+ */
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
         children: ReactElement;
@@ -46,6 +51,11 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * TabPanel component to display content of a tab.
+ * @param {TabPanelProps} props - The props for the component.
+ * @returns {ReactElement} The tab panel component.
+ */
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -66,6 +76,11 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+/**
+ * Generates accessibility properties for tabs.
+ * @param {number} index - The index of the tab.
+ * @returns {object} The accessibility properties.
+ */
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
@@ -73,11 +88,20 @@ function a11yProps(index: number) {
     };
 }
 
+/**
+ * Props for the SettingsDialog component.
+ * @interface SimpleDialogProps
+ */
 export interface SimpleDialogProps {
     open: boolean;
     onClose: () => void;
 }
 
+/**
+ * SettingsDialog component to display user settings and profile information.
+ * @param {SimpleDialogProps} props - The props for the component.
+ * @returns {ReactElement} The settings dialog component.
+ */
 export default function SettingsDialog(props: SimpleDialogProps) {
     const session = useSession()
     const user = useUser();

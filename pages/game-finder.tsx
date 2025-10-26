@@ -19,6 +19,10 @@ import GameCard from "../components/gamecard";
 import AutocompleteGenres from "../components/autocompleteGenres";
 import { Game } from "../redux/types";
 
+/**
+ * A page component that allows users to find games based on selected criteria.
+ * @returns {React.ReactElement} The rendered game finder page.
+ */
 const GameFinder: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [selectedAgeRange, setSelectedAgeRange] = useState("");

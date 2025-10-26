@@ -7,6 +7,9 @@ const initialState = {
   darkMode: cachedTheme === null ? true : !!JSON.parse(cachedTheme),
 };
 
+/**
+ * Redux slice for managing the theme state.
+ */
 export const themeSlice = createSlice({
   name: "theme",
   initialState,

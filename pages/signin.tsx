@@ -9,7 +9,11 @@ import Head from "next/head";
 import StyledBreadcrumbs from "../components/styledBreadcrumbs";
 import { useRouter } from "next/router";
 
-
+/**
+ * The sign-in page component.
+ * It provides a user interface for authentication.
+ * @returns {React.ReactElement} The rendered sign-in page.
+ */
 export default function SignIn() {
   const supabase = useSupabaseClient()
   const theme = useTheme()
